@@ -6,3 +6,8 @@ main {
 .post-header {
     text-align: center;
 }
+
+p {
+    font-size: 20px;
+    line-height: 28px;
+}
