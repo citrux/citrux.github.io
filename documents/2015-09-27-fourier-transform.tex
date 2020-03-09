@@ -1,0 +1,196 @@
+\documentclass{ncc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[T2A]{fontenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{pscyr}
+\usepackage{hyperref}
+\title{Постигая преобразование Фурье}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Ряд Фурье и преобразование Фурье}
+Рассмотрим непрерывную периодическую функцию \( f \) с периодом \( 2\pi \).
+Предположим, что её можно представить в виде ряда:
+\[
+    f(x) = \sum\limits_{n=-\infty}^{+\infty} c_n e^{inx}.
+\]
+Заметим, что
+\[
+    \int\limits_0^{2\pi} e^{i(n-m)x} dx = 2\pi\delta_{mn},
+\]
+откуда получим простой способ определения коэффициентов \( c_n \):
+\[
+    \int\limits_0^{2\pi} f(x) e^{-inx} dx = 2\pi c_n,
+\]
+\[
+    c_n = \frac{1}{2\pi}\int\limits_0^{2\pi} f(x) e^{-inx} dx.
+\]
+Такой ряд называется рядом Фурье функции \( f \).
+
+Если период функции отличается от \( 2\pi \), то можно сделать замену
+переменной и получить
+\[
+    f(x) = \sum\limits_{n=0}^\infty c_n e^\frac{in2\pi x}{L},\quad
+    c_n = \frac{1}{L}\int\limits_{-L/2}^{L/2} f(x^\prime) e^\frac{-in2\pi x^\prime}{L} dx^\prime.
+\]
+Для непериодических функций растянем период на всю прямую \( \mathbb{R} \)
+\[
+   c_n = \lim_{L\to\infty} \frac{1}{L}\int\limits_{-L/2}^{L/2} f(x^\prime) e^\frac{-in2\pi x^\prime}{L} dx^\prime.
+\]
+Пусть \( k_n = 2\pi n / L,\ \Delta k = 2\pi / L \):
+\[
+   c_n = \lim_{\Delta k \to 0} \frac{\Delta k}{2\pi}\int\limits_{-\infty}^{+\infty} f(x^\prime) e^{-ik_nx^\prime} dx^\prime.
+\]
+Вернёмся к ряду:
+\[
+    f(x) = \lim_{\Delta k\to 0}\frac{1}{2\pi}\sum\limits_{n=-\infty}^{+\infty} \Delta k
+    e^{ik_nx}\int\limits_{-\infty}^{+\infty} f(x^\prime) e^{-ik_nx^\prime}
+    dx^\prime.
+\]
+Нетрудно понять, что предел суммы -- это интеграл, поэтому
+\[
+    f(x) = \frac{1}{\sqrt{2\pi}}\int\limits_{-\infty}^{+\infty}  \left[\frac{1}{\sqrt{2\pi}}\int\limits_{-\infty}^{+\infty} f(x^\prime) e^{-ikx^\prime} dx^\prime\right] e^{ikx} dk.
+\]
+Преобразованием Фурье называется отображение
+\[
+    \tilde{f}(k) = \frac{1}{\sqrt{2\pi}}\int\limits_{-\infty}^{+\infty} f(x) e^{-ikx} dx.
+\]
+Оно позволяет по «форме сигнала» \(f(x)\) судить о его спектре
+\(\tilde{f}(k)\). А чтобы собрать сигнал из его спектра пользуются обратным
+преобразованием Фурье:
+\[
+    f(x) = \frac{1}{\sqrt{2\pi}}\int\limits_{-\infty}^{+\infty} \tilde{f}(k) e^{ikx} dk.
+\]
+
+В дальнейшем нам понадобится понятие \textbf{скалярного произведения функций}, поэтому
+для начала разберём его.
+
+\section{Скалярное произведение функций}
+
+Для векторов понятие скалярного произведения вводится обычно следующим
+образом
+\[
+    \vec{a} \cdot \vec{b} = (\vec{a}, \vec{b}) = |\vec{a}| |\vec{b}| \cos\theta_{ab}.
+\]
+В ортонормированном базисе его можно записать в виде
+\[
+    (\vec{a}, \vec{b}) = a_ib_i,
+\]
+
+Для функций можно ввести операцию, свойства которой будут очень похожи на
+свойства скалярного произведения векторов:
+\[
+    \langle f | g \rangle = \int\limits_{-\infty}^{+\infty} f^\ast(x) g(x)\,
+    dx.
+\]
+
+Заметим, что в этом контексте преобразование Фурье выглядит как матрица
+перехода от одного базиса к другому. Рассмотрим его действие на
+скалярное произведение.
+
+\section{Равенство Парсеваля}
+
+Представим в скалярном произведении двух функций одну из них через её
+Фурье-образ:
+\[
+    \langle f | g \rangle =
+    \frac{1}{\sqrt{2\pi}}\iint\limits_{-\infty}^{+\infty}
+    \tilde{f}^\ast(k) e^{-ikx} g(x) \,dx\,dk=
+    \int\limits_{-\infty}^{+\infty} \tilde{f}^\ast(k) \tilde{g}(k)\,dk =
+    \langle \tilde{f} | \tilde{g} \rangle.
+\]
+Скалярное произведение -- инвариант преобразования Фурье. В этом
+прослеживается аналогия с обычными векторами, скалярное произведение которых
+является инвариантом преобразования базиса.
+
+\section{Соотношение неопределённостей}
+Один из фундаментальных результатов квантовой механики -- соотношение
+неопределённостей
+\[
+    \Delta x  \Delta p_x \ge \frac{\hbar}{2}
+\]
+является свойством преобразования Фурье. Под неопределённостями здесь понимают
+среднеквадратичные отклонения сопряжённых координаты и импульса:
+\[
+    \Delta x = \sqrt{\langle(x-\langle x \rangle)^2\rangle},\quad
+    \Delta p_x = \hbar\sqrt{\langle(k-\langle k \rangle)^2\rangle}.
+\]
+Так как с корнями работать неудобно, перейдём к дисперсиям:
+\[
+    D(x)\cdot D(k) = \langle\psi(x)|(x-\langle x\rangle)^2|\psi(x)\rangle
+    \langle\tilde{\psi}(k)|(k-\langle k \rangle)^2|\tilde{\psi}(k)\rangle.
+\]
+Здесь функции \( \psi \)  и \( \tilde\psi \) положим нормированными на 1.
+Для удобства выполним преобразование координат:
+\[
+    x^\prime = x - \langle x \rangle,\quad
+    k^\prime = k - \langle k \rangle,
+\]
+и рассмотрим вспомогательную функцию
+\[
+    \phi(x^\prime) = e^{-i\langle k \rangle x^\prime} \psi(x),\quad
+    \tilde{\phi}(k^\prime) = e^{ik\langle x \rangle} \tilde{\psi}(k),
+\]
+используя которую перепишем искомое произведение в виде
+\[
+    D(x)\cdot D(k) = \int\limits_{-\infty}^{+\infty} x^2 \phi^\ast(x)\phi(x)
+    \,dx\cdot \int\limits_{-\infty}^{+\infty} k^2 \tilde{\phi}^\ast(k)\tilde{\phi}(k)\,dk
+\]
+или
+\[
+    D(x)\cdot D(k) = \langle x\phi|x \phi\rangle
+    \langle ik\tilde{\phi}|ik \tilde{\phi}\rangle =
+    \langle x\phi|x \phi\rangle
+    \langle \tilde{\left(\phi^\prime\right)}|\tilde{\left(\phi^\prime\right)}\rangle,
+\]
+где неявно используется равенство
+\[
+    \tilde{(\phi^\prime)} = \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty}
+    \phi^\prime e^{-ikx}\,dx =
+    \left.\frac{\phi e^{-ikx}}{\sqrt{2\pi}}\right|_{-\infty}^{+\infty}
+    +  ik\tilde{\phi} = ik\tilde{\phi}.
+\]
+Пользуясь равенством Парсеваля, получаем
+\[
+    D(x)\cdot D(k) = \langle x \phi|x \phi\rangle \langle \phi^\prime | \phi^\prime \rangle.
+\]
+Это ни что иное, как произведение квадратов двух норм. Используя неравенство
+Коши-Буняковского, получаем:
+\[
+    \langle x\phi|x \phi\rangle
+    \langle \phi^\prime|\phi^\prime\rangle \ge
+    \left|\langle x\phi | \phi^\prime \rangle\right|^2.
+\]
+Рассмотрим внимательнее правую часть и проинтегрируем по частям:
+\[
+    \langle x\phi|\phi^\prime\rangle = -\langle \phi^\prime | x\phi \rangle
+    - \langle\phi|\phi\rangle,
+\]
+\[
+    \langle x\phi|\phi^\prime\rangle + \langle\phi^\prime|x\phi\rangle = -1.
+\]
+Воспользуемся неравенством треугольника:
+\[
+    |\langle x\phi|\phi^\prime\rangle| + |\langle\phi^\prime|x\phi\rangle| \ge 1,
+    \quad
+    |\langle x\phi|\phi^\prime\rangle| \ge \frac{1}{2}.
+\]
+Возвращаясь к неравенству Коши-Буняковского, имеем
+\[
+    D(x)\cdot D(k) \ge \frac{1}{4},
+\]
+откуда получаем соотношение неопределённостей:
+\[
+    \Delta x  \Delta p_x \ge \frac{\hbar}{2}.
+\]
+
+Совершенно аналогично можно доказать другое соотношение:
+\[
+    \Delta E  \Delta t \ge \frac{\hbar}{2}.
+\]
+
+На этом пока всё.
+\end{document}
