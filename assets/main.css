@@ -11,3 +11,8 @@ p {
     font-size: 20px;
     line-height: 28px;
 }
+
+.dt-published {
+    font-size: 16px;
+    color: #555;
+}
