@@ -1,22 +1,35 @@
+body {
+    font-size: 20px;
+    line-height: 28px;
+    font-family: serif;
+}
+
 main {
     width: 800px;
     margin: auto;
 }
 
-.post-header {
+h1 {
+    color: #333;
+    font-weight: lighter;
     text-align: center;
 }
 
-p {
-    font-size: 20px;
-    line-height: 28px;
+article>header {
+    text-align: center;
+    font-weight: lighter;
+}
+
+article>footer>nav {
+    text-align: center;
 }
 
 .dt-published {
     font-size: 16px;
-    color: #555;
+    color: #333;
 }
 
-.to-main-page {
-    text-align: center;
+.post-list {
+    list-style: none;
+    padding-left: 0;
 }

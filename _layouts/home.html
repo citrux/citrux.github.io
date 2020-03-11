@@ -10,11 +10,10 @@ layout: default
   {{ content }}
 
   {%- if site.posts.size > 0 -%}
-    <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
     <ul class="post-list">
       {%- for post in site.posts -%}
       <li>
-        <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
+        <span class="post-meta">{{ post.date | date: "%d.%m.%Y" }}</span>
         <a class="post-link" href="{{ post.url | relative_url }}">
           {{ post.title | escape }}
         </a>
@@ -24,8 +23,6 @@ layout: default
       </li>
       {%- endfor -%}
     </ul>
-
-    <p class="rss-subscribe">Кто-то ещё пользуется <a href="{{ "/feed.xml" | relative_url }}">RSS?</a></p>
   {%- endif -%}
 
 </div>

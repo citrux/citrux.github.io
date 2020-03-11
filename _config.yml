@@ -23,8 +23,7 @@ github_username:  citrux
 
 # Build settings
 markdown: kramdown
-plugins:
-  - jekyll-feed
+
 
 defaults:
   - scope:
