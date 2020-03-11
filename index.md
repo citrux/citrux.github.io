@@ -7,4 +7,4 @@ title: Главная
 list_title: Содержание
 ---
 
-Я сделал
+Я сделал это. А вот [это](https://sputnikas.github.io) сделал мой бро. А вот [ещё](https://freecx.github.io).
