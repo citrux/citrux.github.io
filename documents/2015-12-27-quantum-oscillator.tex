@@ -1,0 +1,134 @@
+\input{preamble}
+
+\title{Классический осциллятор как квантовый}
+
+\begin{document}
+\maketitle
+
+На примере гармонического осциллятора покажем, что обычный пружинный маятник может быть описан с точки зрения квантовой механики и полученные при этом результаты будут совпадать с классическими.
+
+В квантовой механике для описания осциллятора используется волновая функция \(\Psi\), подчиняющаяся волновому уравнению:
+\[
+    i\hbar\frac{\partial \Psi}{\partial t} = \hat{H}\Psi,
+\]
+где
+\[
+    \hat{H} = \frac{\hat{p}^2}{2m} + \frac{k\hat{x}^2}{2}
+\]
+называется гамильтонианом нашего осциллятора. Операторы имеют различный вид в зависимости от представления. Рассмотрим координатное представление, в котором
+\[
+    \hat{x} = x,\quad \hat{p} = -i\hbar\frac{\partial}{\partial x}.
+\]
+В нём волновое уравнение примет вид
+\[
+    i\hbar\frac{\partial \Psi(x,t)}{\partial t} = \left( -\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} + \frac{kx^2}{2} \right)\Psi(x,t).
+\]
+Это уравнение можно решить методом разделения переменных:
+\[
+    \Psi(x,t) = \psi(x)\exp\left(-i\frac{E}{\hbar}t\right),
+\]
+где функция \(\psi(x)\) удовлетворяет дифференциальному уравнению
+\[
+    -\frac{h^2}{2m}\psi^{\prime\prime} + \left(\frac{kx^2}{2} - E\right)\psi = 0.
+\]
+Немного преобразуем его:
+\[
+    \psi^{\prime\prime} - \left(\frac{m^2\omega^2}{\hbar^2}x^2 - \frac{2mE}{\hbar^2}\right)\psi = 0.
+\]
+Перейдём к безразмерной переменной
+\[
+    y = \sqrt{\frac{m\omega}{\hbar}}x,
+\]
+относительно которой уравнение примет вид
+\[
+    \psi^{\prime\prime} - \left(y^2 - \frac{2E}{\hbar\omega}\right)\psi = 0.
+\]
+Выполним ещё одну подстановку:
+\[
+    \psi(y) = u(y)\exp(-y^2/2),
+\]
+\[
+    u^{\prime\prime} - 2y u^\prime - (1 - y^2)u - (y^2 - \lambda)u = 0,
+\]
+\[
+    u^{\prime\prime} - 2y u^\prime + (\lambda - 1)u = 0.
+\]
+Это уравнение полиномов Эрмита, если положить \( \lambda - 1 = 2n \).
+Таким образом, энергия осциллятора может принимать только значения
+\[
+    E_n = \frac{\hbar\omega}{2} + n\hbar\omega,\ n=0,1,2,\ldots
+\]
+а волновая функция при этом будет иметь вид
+\[
+    \Psi_n(x, t) = C\tilde{H}_n\left(\sqrt{\frac{m\omega}{\hbar}}x\right)\exp\left(-\frac{m\omega x^2}{2\hbar}\right)\exp\left(-i\frac{E_n}{\hbar}t\right),
+\]
+где \( \tilde{H}_n \) -- нормированные многочлены Эрмита, а \( C \) -- нормировочный коэффициент, который определяется из условия нормировки
+\[
+    \int\limits_{-\infty}^{+\infty} \Psi_n^\star  \Psi_n\,dx = 1 \Rightarrow
+    C = \sqrt[4]{\frac{m\omega}{\hbar}}.
+\]
+
+Найденные нами состояния характеризуются неизменным во времени значением энергии. Такие состояния называются стационарными. Посмотрим, как в таких состояниях меняется положение маятника:
+\[
+    \langle x_n(t) \rangle = \langle \Psi_n | x | \Psi_n \rangle = \int\limits_{-\infty}^{+\infty}
+    \Psi_n^\star  x \Psi_n\, dx = 0.
+\]
+То есть маятник, обладая некоторой энергией, находится в положении равновесия. Тут мы видим некоторое расхождение с поведением обычного маятника. Но это расхождение довольно легко объясняется: для возбуждения стационарного состояния осциллятору нужно передать энергию, равную энергии этого состояния, что в случае маятника невозможно сделать ввиду малой разности между уровнями.
+
+Чтобы с этой точки зрения объяснить поведение обычного маятника, требуется возбудить сразу несколько стационарных состояний:
+\[
+    \Psi = \sum c_n \Psi_n,\quad \sum |c_n|^2 = 1.
+\]
+Энергия такого состояния
+\[
+    E = \sum c_m^\star c_n \langle\Psi_m|\hat{H}|\Psi_n\rangle = \sum c_m^\star c_n E_n\langle\Psi_m|\Psi_n\rangle = |c_n|^2 E_n,
+\]
+а координата будет изменяться следующим образом:
+\[
+    x(t) = \sum c_m^\star c_n \langle\Psi_m|x|\Psi_n\rangle = C^2\sum c_m^\star c_n \langle \tilde{H}_m(y) | x e^{-y^2} | \tilde{H}_n(y)\rangle \exp\left(-i\frac{E_n-E_m}{\hbar}t\right).
+\]
+Рассмотрим подробнее величину
+\[
+    \langle \tilde{H}_m(y) | xe^{-y^2} | \tilde{H}_n(y)\rangle = \int\limits_{-\infty}^{+\infty} e^{-y^2}\tilde{H}_m^\star (y) x \tilde{H}_n(y)\, dx = \frac{\hbar}{m\omega} \int\limits_{-\infty}^{+\infty} e^{-y^2} y \tilde{H}_m(y) \tilde{H}_n(y)\, dy.
+\]
+Так как многочлены Эрмита \( \tilde{H}_m(y) \) ортогональны на действительной прямой с весом \( e^{-y^2} \), то это скалярное произведение будет отлично от нуля только в случае \( |n - m| = 1 \):
+\[
+    \langle \tilde{H}_m(y) | xe^{-y^2} | \tilde{H}_n(y)\rangle =
+    \frac{\hbar}{m\omega}(a_n\delta_{n, m+1} + a_m\delta_{m, n+1}),
+\]
+где
+\[
+    a_n = \int\limits_{-\infty}^{+\infty} e^{-y^2} y \tilde{H}_n(y) \tilde{H}_{n-1}(y)\, dy = \sqrt{\frac{n}{2}}.
+\]
+Возвращаясь, получаем
+\[
+    x(t) = \sqrt{\frac{\hbar}{m\omega}}\sum c_m^\star c_n (a_n\delta_{n, m+1} + a_m\delta_{m, n+1}) \exp(-i(n-m)\omega t),
+\]
+\[
+    x(t) = \sqrt{\frac{\hbar}{m\omega}}\sum  a_n (c_n c_{n-1}^\star  e^{-i\omega t}+ c_{n-1} c_n^\star  e^{i\omega t}) = 
+    2\sqrt{\frac{\hbar}{m\omega}}S  \cos(\omega t + \phi_0),
+\]
+где
+\[
+    S = \left|\sum a_n c_n^\star  c_{n-1}\right|,\quad
+    \phi_0 = \arg \sum a_n c_n^\star  c_{n-1}.
+\]
+
+Пусть энергия осциллятора равна \( E \) и она находится вблизи уровня \( E_n = \hbar\omega(n+1/2) \). Положим, что коэффициенты состояний с близкими к среднему значению энергиями много больше остальных. Пусть вблизи состояния с номером \( n \) заметные амплитуды имеют \( 2n_1 \) состояний, причём \( n \gg n_1 \gg 1 \) и \( c_{n-n_1} \approx \ldots \approx c_n \approx \ldots \approx c_{n+n_1} \). Тогда
+\[
+    \sum_{m=n-n_1}^{n+n_1} c_m^\star  c_{m} \approx 1,
+\]
+\[
+    S \approx \left|\sum_{m=n-n_1+1}^{n+n_1} a_m c_m^\star  c_{m-1}\right| \approx \left|\sum_{m=n-n_1+1}^{n+n_1} \sqrt{\frac{m}{2}}c_m c_m^\star \right| \approx \sqrt{\frac{n}{2}}.
+\]
+Амплитуда колебаний получается равной
+\[
+    A = 2\sqrt{\frac{n\hbar\omega}{2m\omega^2}} = 2\sqrt{\frac{E}{2k}},
+\]
+откуда получается классическое
+\[
+    E = \frac{kA^2}{2}.
+\]
+Таким образом, энергия колебаний маятника связана с их амплитудой знакомой со школы формулой.
+
+\end{document}
