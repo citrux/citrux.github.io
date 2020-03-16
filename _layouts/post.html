@@ -1,11 +1,11 @@
 ---
 layout: default
 ---
-<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+<article>
   <header>
-    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+    <h1>{{ page.title | escape }}</h1>
     <p class="post-meta">
-      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}">
         {{ page.date | date: "%d.%m.%Y" }}
       </time>
     </p>
