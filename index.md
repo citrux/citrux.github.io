@@ -1,6 +1,5 @@
 ---
 layout: home
-title: scio me nihil scire
 ---
 
 Я сделал это. А вот [это](https://sputnikas.github.io) сделал мой бро. А вот [ещё](https://freecx.github.io).
