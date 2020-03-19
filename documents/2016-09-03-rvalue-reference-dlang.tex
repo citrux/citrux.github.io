@@ -1,0 +1,110 @@
+\input{preamble}
+\title{Rvalue-reference в D}
+\begin{document}
+\maketitle
+
+Речь сегодня пойдёт о передаче в функцию rvalue по ссылке. Сравнивать будем C++ и D.
+
+Как правило, при передаче в функцию структуры желательно избегать лишнего копирования, так как это сказывается на производительности не в лучшую сторону. Для этого используется передача по ссылке. В случае C++
+\begin{verbatim}
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+struct vec {
+  double x, y, z;
+};
+
+double length(vec& v) {
+  return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+int main() {
+  vec a = {3, 4, 12};
+  cout << length(a) << endl;
+  return 0;
+}
+\end{verbatim}
+Для D всё выглядит очень похоже:
+\begin{verbatim}
+import std.stdio;
+import std.math;
+
+struct vec {
+  double x, y, z;
+};
+
+double length(ref vec v) {
+  return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+void main() {
+  vec a = {3, 4, 12};
+  writeln(length(a));
+}
+\end{verbatim}
+Но что, если мы не захотим создавать переменную \texttt{a}, а попробуем передать в функцию в качестве аргумента конструктор:
+\begin{verbatim}
+length(vec(3,4,12))
+\end{verbatim}
+В этом случае оба компилятора будут ругаться на то, что они не могут получить неконстантную ссылку на rvalue, коим является результат вызова конструктора. Функция \texttt{length} не изменяет своего аргумента, поэтому слегка её изменим, сделав аргумент константной ссылкой:
+\begin{verbatim}
+double length(const vec& v) {
+  return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+\end{verbatim}
+На D это выглядит так:
+\begin{verbatim}
+double length(ref const vec v) {
+  return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+\end{verbatim}
+В С++ это решает проблему, а в D нет -- он считает, что реальный тип аргумента vec, а ожидаемый \texttt{ref const vec}. Дело в том, что D воспринимает rvalue только как значение, но при передаче в функцию лишнего копирования не происходит. Поэтому от нас требуется определить такую функцию, которая сможет одновременно принимать и \texttt{ref const vec}, и просто \texttt{vec}. И тут не обойтись без шаблона:
+\begin{verbatim}
+double length(T: vec)(auto ref const T v) {
+  return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+\end{verbatim}
+
+Собирая всё в кучу, имеем
+\begin{verbatim}
+import std.stdio;
+import std.math;
+
+struct vec {
+  double x, y, z;
+};
+
+double length(T: vec)(auto ref const T v) {
+  return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+void main() {
+  vec a = {3, 4, 12};
+  writeln(length(a));
+}
+\end{verbatim}
+
+Можно заметить, что проблемы можно избежать, определив \texttt{length} как метод \texttt{vec}:
+\begin{verbatim}
+import std.stdio;
+import std.math;
+
+struct vec {
+  double x, y, z;
+
+  double length() {
+    return sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+  }
+};
+
+void main() {
+  vec a = {3, 4, 12};
+  writeln(length(a));
+}
+\end{verbatim}
+Но если нам понадобится скалярное произведение, то всё равно придётся писать такую вот шаблонную функцию.
+
+В общем, если в D вам потребуется аналог \texttt{const~T\&}, то это \texttt{auto~ref~const~T}.
+\end{document}
