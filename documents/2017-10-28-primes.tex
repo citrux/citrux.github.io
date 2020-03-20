@@ -1,0 +1,36 @@
+\input{preamble}
+\title{Гармонический ряд по простым числам}
+\begin{document}
+\maketitle
+Покажем, что ряд
+\begin{equation*}
+    \sum_{p-\text{простое}}\frac{1}{p}
+\end{equation*}
+расходится. Для этого воспользуемся дзета-функцией Римана и её представлением в виде бесконечного произведения:
+\begin{equation*}
+    \zeta(s) = \prod_{p-\text{простое}}\frac{1}{1-p^{-s}}.
+\end{equation*}
+Рассмотрим логарифм правой части при \( s = 1 \):
+\begin{equation*}
+    \ln\prod_{p-\text{простое}}\frac{1}{1-p^{-s}} = -\sum_{p-\text{простое}}\ln\left(1-p^{-s}\right) = \sum_{p-\text{простое}}\frac{1}{p} + \sum_{n=2}^\infty\sum_{p-\text{простое}}\frac{1}{np^n}
+\end{equation*}
+Последнее слагаемое можно оценить сверху:
+\begin{equation*}
+    \sum_{n=2}^\infty\sum_{p-\text{простое}}\frac{1}{np^n} <
+    \sum_{n=2}^\infty\sum_{k=2}^\infty\frac{1}{nk^n} <
+    \sum_{k=2}^\infty\sum_{n=2}^\infty\frac{1}{k^n} =
+    \sum_{k=2}^\infty\frac{1}{k(k-1)} = 1.
+\end{equation*}
+Таким образом,
+\begin{equation*}
+    \ln\zeta(1) < 1 + \sum_{p-\text{простое}}\frac{1}{p},
+\end{equation*}
+\begin{equation*}
+    \sum_{p-\text{простое}}\frac{1}{p} > \ln\zeta(1) - 1.
+\end{equation*}
+Но \( \zeta(1) \) равна сумме гармонического ряда, поэтому ряд
+\begin{equation*}
+    \sum_{p-\text{простое}}\frac{1}{p}
+\end{equation*}
+расходится.
+\end{document}
