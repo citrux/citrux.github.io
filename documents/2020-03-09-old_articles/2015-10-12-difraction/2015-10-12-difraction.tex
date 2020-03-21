@@ -1,4 +1,29 @@
-\input{preamble}
+\documentclass{ncc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[T2A]{fontenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{pscyr}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[colorlinks,linkcolor=black,urlcolor=blue]{hyperref}
+
+\lstloadlanguages{C++}
+\lstset{
+language=C++,
+extendedchars=\true, %Чтобы русские буквы в комментариях были
+keepspaces=true,
+inputencoding=utf8,
+breaklines,
+columns=fullflexible,
+flexiblecolumns,
+numbers=left,
+numberstyle={\footnotesize},
+commentstyle=\it,
+stringstyle=\bf,
+belowcaptionskip=5pt }
+
 
 \title{Дифракция и шейдеры}
 

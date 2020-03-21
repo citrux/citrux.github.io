@@ -1,4 +1,29 @@
-\input{preamble}
+\documentclass{ncc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[T2A]{fontenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{pscyr}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[colorlinks,linkcolor=black,urlcolor=blue]{hyperref}
+
+\lstloadlanguages{C++}
+\lstset{
+language=C++,
+extendedchars=\true, %Чтобы русские буквы в комментариях были
+keepspaces=true,
+inputencoding=utf8,
+breaklines,
+columns=fullflexible,
+flexiblecolumns,
+numbers=left,
+numberstyle={\footnotesize},
+commentstyle=\it,
+stringstyle=\bf,
+belowcaptionskip=5pt }
+
 
 \title{Модель Кронига-Пенни}
 
@@ -22,7 +47,7 @@
 Для определения энергии стационарных состояний решим уравнение Шрёдингера в яме и под барьером, а потом сошьём их решение на границе:
 \[
   \begin{cases}
-    -\frac{\hbar^2}{2m}\Delta \psi_1 = E\psi_1,\\
+    -\frac{\hbar^2}{2m}\Delta \psi_1 = E\psi_1,\
     \left(-\frac{\hbar^2}{2m}\Delta - U\right) \psi_2 = E\psi_2,
   \end{cases}
 \]
@@ -52,16 +77,16 @@
 Запишем эти условия в виде системы уравнений относительно амплитудных коэффициентов:
 \[
     \begin{pmatrix}
-        1 & 1 & -1 & -1 \\
-        -i\alpha & i\alpha & i\beta & -i\beta \\
-        e^{i\alpha a} & e^{-i\alpha a}  & -e^{ikd-i\beta b}  & -e^{ikd+i\beta b} \\
+        1 & 1 & -1 & -1 \
+        -i\alpha & i\alpha & i\beta & -i\beta \
+        e^{i\alpha a} & e^{-i\alpha a}  & -e^{ikd-i\beta b}  & -e^{ikd+i\beta b} \
         -i\alpha e^{i\alpha a} & i\alpha e^{-i\alpha a}  & i\beta e^{ikd-i\beta b}  &
         -i\beta e^{ikd+i\beta b}
     \end{pmatrix}
     \begin{pmatrix}
-        A_1\\
-        A_2\\
-        B_1\\
+        A_1\
+        A_2\
+        B_1\
         B_2
     \end{pmatrix}
     =
@@ -71,9 +96,9 @@
 системы:
 \[
     \begin{vmatrix}
-        1 & 1 & -1 & -1 \\
-        -\alpha & \alpha & \beta & -\beta \\
-        e^{i\alpha a} & e^{-i\alpha a}  & -e^{ikd-i\beta b}  & -e^{ikd+i\beta b} \\
+        1 & 1 & -1 & -1 \
+        -\alpha & \alpha & \beta & -\beta \
+        e^{i\alpha a} & e^{-i\alpha a}  & -e^{ikd-i\beta b}  & -e^{ikd+i\beta b} \
         -\alpha e^{i\alpha a} & \alpha e^{-i\alpha a}  & \beta e^{ikd-i\beta b}  &
         -\beta e^{ikd+i\beta b}
     \end{vmatrix}
@@ -82,9 +107,9 @@
 \[
     =4
     \begin{vmatrix}
-        1 & 0 & -1 & 0 \\
-        -\alpha & \alpha & \beta & -\beta \\
-    e^{i\alpha a} & -i\sin \alpha a  & -e^{ikd-i\beta b}  & -ie^{ikd}\sin\beta b \\
+        1 & 0 & -1 & 0 \
+        -\alpha & \alpha & \beta & -\beta \
+    e^{i\alpha a} & -i\sin \alpha a  & -e^{ikd-i\beta b}  & -ie^{ikd}\sin\beta b \
         -\alpha e^{i\alpha a} & \alpha \cos\alpha a & \beta e^{ikd-i\beta b}  &
         -\beta e^{ikd}\cos\beta b
     \end{vmatrix}
@@ -93,9 +118,9 @@
 \[
     =4
     \begin{vmatrix}
-        1 & 0 & 1 & 0 \\
-        0 & \alpha & 0 & \beta \\
-    \cos\alpha a & -i\sin \alpha a  & e^{ikd}\cos \beta b  & ie^{ikd}\sin\beta b \\
+        1 & 0 & 1 & 0 \
+        0 & \alpha & 0 & \beta \
+    \cos\alpha a & -i\sin \alpha a  & e^{ikd}\cos \beta b  & ie^{ikd}\sin\beta b \
         -i\alpha \sin\alpha a & \alpha \cos\alpha a & i \beta e^{ikd} \sin{\beta b}  &
         \beta e^{ikd}\cos\beta b
     \end{vmatrix}
@@ -104,9 +129,9 @@
 \[
     =4
     \begin{vmatrix}
-        1 & 0 & 0 & 0 \\
-        0 & \alpha & 0 & \beta \\
-    \cos\alpha a & -i\sin \alpha a  & e^{ikd}\cos \beta b - \cos\alpha a  & ie^{ikd}\sin\beta b \\
+        1 & 0 & 0 & 0 \
+        0 & \alpha & 0 & \beta \
+    \cos\alpha a & -i\sin \alpha a  & e^{ikd}\cos \beta b - \cos\alpha a  & ie^{ikd}\sin\beta b \
         -i\alpha \sin\alpha a & \alpha \cos\alpha a & i \beta e^{ikd} \sin{\beta
     b} + i\alpha\sin\alpha a  &
         \beta e^{ikd}\cos\beta b
@@ -116,9 +141,9 @@
 \[
     =4\alpha\beta
     \begin{vmatrix}
-        1 & 0 & 1 \\
+        1 & 0 & 1 \
         -\frac{i}{\alpha}\sin \alpha a  & e^{ikd}\cos \beta b - \cos\alpha a  &
-        \frac{i}{\beta} e^{ikd}\sin\beta b \\
+        \frac{i}{\beta} e^{ikd}\sin\beta b \
         \cos\alpha a & i\beta e^{ikd} \sin{\beta
     b} + i\alpha\sin\alpha a  &
         e^{ikd}\cos\beta b
@@ -128,9 +153,9 @@
 \[
     =4\alpha\beta
     \begin{vmatrix}
-        1 & 0 & 0 \\
+        1 & 0 & 0 \
         -\frac{i}{\alpha}\sin \alpha a  & e^{ikd}\cos \beta b - \cos\alpha a  &
-        \frac{i}{\beta} e^{ikd}\sin\beta b + \frac{i}{\alpha}\sin \alpha a  \\
+        \frac{i}{\beta} e^{ikd}\sin\beta b + \frac{i}{\alpha}\sin \alpha a  \
         \cos\alpha a & i\beta e^{ikd} \sin{\beta
     b} + i\alpha\sin\alpha a  &
         e^{ikd}\cos\beta b-\cos\alpha a
@@ -141,7 +166,7 @@
     =4\alpha\beta
     \begin{vmatrix}
         e^{ikd}\cos \beta b - \cos\alpha a  &
-        \frac{i}{\beta} e^{ikd}\sin\beta b + \frac{i}{\alpha}\sin \alpha a  \\
+        \frac{i}{\beta} e^{ikd}\sin\beta b + \frac{i}{\alpha}\sin \alpha a  \
         i\beta e^{ikd} \sin{\beta b} + i\alpha\sin\alpha a  &
         e^{ikd}\cos\beta b-\cos\alpha a
     \end{vmatrix} = 0

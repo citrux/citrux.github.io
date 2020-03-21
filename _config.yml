@@ -28,7 +28,7 @@ markdown: kramdown
 
 defaults:
   - scope:
-      path: "documents/*.pdf"
+      path: "documents/**/*.pdf"
     values:
       pdf: true
 # Exclude from processing.
