@@ -52,6 +52,7 @@ tags: math, physics, programming
 ## [Почему правильных многогранников всего пять?](/documents/2020-03-09-old_articles/2016-01-10-platonic-solids/2016-01-10-platonic-solids.pdf)
 <time class="dt-published">10.01.2016</time>
 
+Нужно было держать темп, поэтому написал про многогранники. Летом только про них читал, почему бы не написать.
 
 ## [Инварианты. След тензора](/documents/2020-03-09-old_articles/2016-05-26-trace/2016-05-26-trace.pdf)
 <time class="dt-published">26.05.2016</time>
