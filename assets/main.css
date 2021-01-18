@@ -7,6 +7,10 @@
     padding-left: 0;
 }
 
+body > footer.container {
+    margin-top: 2em;
+}
+
 @media only screen and (prefers-color-scheme: dark) {
     body {
         color: rgb(218, 218, 218);
