@@ -1,5 +1,33 @@
-* {
-    font-family: monospace;
+body {
+    font-family: "Source Serif Pro", "Apple Garamond", Baskerville, "Libre Baskerville", "Times New Roman", "Droid Serif", Times, serif;
+    font-size: 16px;
+    color: #000;
+    background-color: #fff;
+}
+
+code {
+    background: transparent;
+    font-family: "IBM Plex Mono", "Liberation Mono", Consolas, Courier, monospace;
+}
+
+a {
+    color: #272727;
+    text-decoration: none;
+    background-image: linear-gradient(#333, #333);
+    background-size: 1px 1px;
+    background-repeat: repeat-x;
+    background-position: 0% calc(100% - 0.1em);
+    font-variant-numeric: lining-nums;
+    text-shadow: 0      0.05em #fff,
+                 0.05em 0.05em #fff,
+                -0.05em 0.05em #fff,
+                 0.17em 0      #fff,
+                -0.17em 0      #fff;
+}
+
+a:hover {
+    color: #999;
+    background-image: linear-gradient(#999, #999);
 }
 
 .post-list {
@@ -13,7 +41,27 @@ body > footer.container {
 
 @media only screen and (prefers-color-scheme: dark) {
     body {
-        color: rgb(218, 218, 218);
-        background-color: rgb(54, 54, 56);
+        color: #ffffff;
+        background-color: #010101;
+    }
+
+    a {
+        color: #e5e5e5;
+        text-decoration: none;
+        background-image: linear-gradient(#dcdcdc, #dcdcdc);
+        background-size: 1px 1px;
+        background-repeat: repeat-x;
+        background-position: 0% calc(100% - 0.1em);
+        font-variant-numeric: lining-nums;
+        text-shadow: 0      0.05em #010101,
+                     0.05em 0.05em #010101,
+                    -0.05em 0.05em #010101,
+                     0.17em 0      #010101,
+                    -0.17em 0      #010101;
+    }
+
+    a:hover {
+        color: #999;
+        background-image: linear-gradient(#8b8b8b, #8b8b8b);
     }
 }
