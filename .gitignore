@@ -4,4 +4,7 @@ _site
 .jekyll-cache
 .DS_Store
 .vscode
-
+.bundle
+vendor
+Gemfile
+Gemfile.lock
