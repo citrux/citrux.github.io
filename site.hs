@@ -19,8 +19,15 @@ htmlCompiler = do
 
 
 --------------------------------------------------------------------------------
+config :: Configuration
+config = defaultConfiguration
+    { destinationDirectory = "../master"
+    }
+
+
+--------------------------------------------------------------------------------
 main :: IO ()
-main = hakyll $ do
+main = hakyllWith config $ do
     match "images/*" $ do
         route   idRoute
         compile copyFileCompiler
