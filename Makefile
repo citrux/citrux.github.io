@@ -9,4 +9,5 @@ site: site.hs
 
 clean:
 	rm -rf _cache
+	rm -rf ../master/*
 
