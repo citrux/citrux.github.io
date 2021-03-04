@@ -1,7 +1,9 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid (mappend)
+import           Data.Monoid            (mappend)
+import           Data.List              (isInfixOf)
 import           Hakyll
+import           System.FilePath.Posix  (splitFileName)
 
 
 htmlCompiler :: Compiler (Item String)
@@ -24,6 +26,18 @@ config = defaultConfiguration
     { destinationDirectory = "../master"
     }
 
+--------------------------------------------------------------------------------
+-- Replace url of the form foo/bar/index.html by foo/bar.
+removeIndexHtml :: Item String -> Compiler (Item String)
+removeIndexHtml item = return $ fmap (withUrls removeIndexStr) item
+    where
+        removeIndexStr :: String -> String
+        removeIndexStr url = case splitFileName url of
+                                (dir, "index.html") | isLocal dir -> dir
+                                _                                 -> url
+        isLocal :: String -> Bool
+        isLocal uri        = not (isInfixOf "://" uri)
+
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -36,12 +50,13 @@ main = hakyllWith config $ do
         route   idRoute
         compile compressCssCompiler
 
-    match "posts/*.adoc" $ do
+    match "posts/*/index.adoc" $ do
         route $ setExtension "html"
         compile $ htmlCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
+            >>= removeIndexHtml
 
     match "posts/**/*" $ do
         route   idRoute
@@ -65,7 +80,7 @@ main = hakyllWith config $ do
     match "index.html" $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*.adoc"
+            posts <- recentFirst =<< loadAll "posts/*/index.adoc"
             let indexCtx =
                     listField "posts" postCtx (return posts) `mappend`
                     defaultContext
@@ -74,6 +89,7 @@ main = hakyllWith config $ do
                 >>= applyAsTemplate indexCtx
                 >>= loadAndApplyTemplate "templates/default.html" indexCtx
                 >>= relativizeUrls
+                >>= removeIndexHtml
 
     match "templates/*" $ compile templateBodyCompiler
 
@@ -81,6 +97,6 @@ main = hakyllWith config $ do
 --------------------------------------------------------------------------------
 postCtx :: Context String
 postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
+    dateField "date" "%d.%m.%Y" `mappend`
     defaultContext
 
