@@ -203,3 +203,11 @@
     blockquote{font-size: 0.8em;}
 }
 
+img{border:0}
+img,object,embed{max-width:100%;height:auto}
+img{-ms-interpolation-mode:bicubic}
+img,object,svg{display:inline-block;vertical-align:middle}
+a img{border:0}
+.admonitionblock>table td.icon img{max-width:none}
+.colist td:not([class]):first-child img{max-width:none}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
