@@ -23,7 +23,7 @@ htmlCompiler = do
 --------------------------------------------------------------------------------
 config :: Configuration
 config = defaultConfiguration
-    { destinationDirectory = "../master"
+    { destinationDirectory = "../www"
     }
 
 --------------------------------------------------------------------------------
