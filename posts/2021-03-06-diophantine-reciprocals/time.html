@@ -1,0 +1,104 @@
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v6.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+
+<script>
+function gauss(A, b) {
+    for (var i = 0; i < A.length; i++) {
+        var a = A[i][i];
+        for (var j = 0; j < A.length; j++) {
+            A[i][j] /= a;
+        }
+        b[i] /= a;
+        for (var k = i+1; k < A.length; k++) {
+            var a = A[k][i]
+            for (var j = 0; j < A.length; j++) {
+                A[k][j] -= a * A[i][j];
+            }
+            b[k] -= a * b[i];
+        }
+    }
+
+    for (var i = A.length - 1; i >= 0; i--) {
+        for (var k = i-1; k >= 0; k--) {
+            b[k] -= A[k][i] * b[i];
+            A[k][i] = 0;
+        }
+    }
+    return b;
+}
+
+function polyfit(x, y, degree) {
+    A = d3.range(degree+1).map(i =>
+            d3.range(degree+1).map(j =>
+                x.map(a => a**(i+j)).reduce((i, j) => i+j)));
+    b = d3.range(degree+1).map(i => x.map((xj, j) => y[j] * xj ** i).reduce((i, j) => i+j));
+    return gauss(A, b);
+}
+
+function polyval(poly, xs) {
+    return xs.map(x => poly.map((a, i) => a * x**i).reduce((i,j)=>i+j));
+}
+
+d3.csv("time.csv", d => [+d.decompositions, +d.time]).then( data => {
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
+var x = d3.scaleLog()
+  .domain(d3.extent(data, i => i[0]))
+  .range([ 0, width ]);
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x));
+
+// Add Y axis
+var y = d3.scaleLog()
+  .domain(d3.extent(data, i => i[1]))
+  .range([ height, 0 ]);
+svg.append("g")
+  .call(d3.axisLeft(y));
+
+logs = data.map(i => [Math.log(i[0]), Math.log(i[1])])
+fit = polyfit(logs.map(i=>i[0]), logs.map(i=>i[1]), 2)
+xs = d3.range(0, logs[logs.length-1][0], 0.1)
+ys = polyval(fit, xs)
+
+approx = xs.map((_, i) => [Math.exp(xs[i]), Math.exp(ys[i])])
+
+svg.append("path")
+  .datum(approx)
+  .attr("fill", "none")
+  .attr("stroke", "steelblue")
+  .attr("stroke-width", 1.5)
+  .attr("d", d3.line()
+    .x(i => x(i[0]))
+    .y(i => y(i[1]))
+    )
+
+svg.append("g")
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+    .selectAll("circle")
+    .data(data)
+    .join("circle")
+      .attr("cx", i => x(i[0]))
+      .attr("cy", i => y(i[1]))
+      .attr("r", 3);
+});
+</script>
