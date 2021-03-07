@@ -1,8 +1,22 @@
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
+<style>
+  * {
+    font-size: 14px;
+  }
 
+
+@media only screen and (prefers-color-scheme: dark) {
+  body {
+    color: #ffffff;
+    background-color: #010101;
+  }
+
+}
+</style>
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
+<a id="link" href="#">сохранить</a>
 
 <script>
 function gauss(A, b) {
@@ -59,31 +73,39 @@ var svg = d3.select("#my_dataviz")
           "translate(" + margin.left + "," + margin.top + ")");
 
 
-var x = d3.scaleLog()
-  .domain(d3.extent(data, i => i[0]))
-  .range([ 0, width ]);
-svg.append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(x));
-
-// Add Y axis
-var y = d3.scaleLog()
-  .domain(d3.extent(data, i => i[1]))
-  .range([ height, 0 ]);
-svg.append("g")
-  .call(d3.axisLeft(y));
-
 logs = data.map(i => [Math.log(i[0]), Math.log(i[1])])
 fit = polyfit(logs.map(i=>i[0]), logs.map(i=>i[1]), 2)
-xs = d3.range(0, logs[logs.length-1][0], 0.1)
+xs = d3.range(0, Math.log(1000), 0.1)
 ys = polyval(fit, xs)
 
 approx = xs.map((_, i) => [Math.exp(xs[i]), Math.exp(ys[i])])
 
+
+var x = d3.scaleLog()
+  .domain([1, 1000])
+  .range([ 0, width ]);
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x).tickValues([1, 10, 100, 1000]).tickFormat(d3.format(".0f")));
+
+
+function formatPower(x) {
+  const e = Math.log10(x);
+  if (e !== Math.floor(e)) return; // Ignore non-exact power of ten.
+  return `10${(e + "").replace(/./g, c => "⁰¹²³⁴⁵⁶⁷⁸⁹"[c] || "⁻")}`;
+}
+
+// Add Y axis
+var y = d3.scaleLog()
+  .domain(d3.extent(approx, i => i[1]))
+  .range([ height, 0 ]);
+svg.append("g")
+  .call(d3.axisLeft(y).ticks(9).tickFormat(formatPower));
+
 svg.append("path")
   .datum(approx)
+  .attr("stroke", "currentColor")
   .attr("fill", "none")
-  .attr("stroke", "steelblue")
   .attr("stroke-width", 1.5)
   .attr("d", d3.line()
     .x(i => x(i[0]))
@@ -91,14 +113,56 @@ svg.append("path")
     )
 
 svg.append("g")
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
+      .attr("fill", "currentColor")
+      .attr("class", "data")
+      .attr("stroke", "none")
     .selectAll("circle")
     .data(data)
     .join("circle")
       .attr("cx", i => x(i[0]))
       .attr("cy", i => y(i[1]))
       .attr("r", 3);
+
+svg.append("text")
+    .attr("fill", "currentColor")
+    .attr("text-anchor", "middle")
+    .attr("x", width/2)
+    .attr("y", height + margin.top + 20)
+    .text("Количество разложений, s");
+
+svg.append("text")
+    .attr("fill", "currentColor")
+    .attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -margin.left+20)
+    .attr("x", -margin.top-height/2)
+    .text("Время работы алгоритма, с");
+
+
+//get svg element.
+var svg = document.getElementsByTagName("svg")[0];
+//get svg source.
+var serializer = new XMLSerializer();
+var source = serializer.serializeToString(svg);
+
+//add name spaces.
+// if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+//     source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+// }
+// if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+//     source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+// }
+
+//add xml declaration
+source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+//convert svg source to URI data scheme.
+var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+
+//set url value to a element's href attribute.
+document.getElementById("link").href = url;
+//you can download svg file by right click menu.
 });
+
+
 </script>
