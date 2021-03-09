@@ -1,8 +1,9 @@
-import sys
-
 from math import prod
 
-PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+
+PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23,
+          29, 31, 37, 41, 43, 47, 53, 59,
+          61, 67, 71, 73, 79, 83, 89, 97]
 
 
 def number(degrees):
@@ -11,10 +12,6 @@ def number(degrees):
 
 def divisors(degrees):
     return prod(2 * d + 1 for d in degrees)
-
-
-def to_string(degrees):
-    return ' • '.join(f'{p}^{d}' for p, d in zip(PRIMES, degrees) if d)
 
 
 def minimal(s):
@@ -35,18 +32,22 @@ def minimal(s):
         n_ = number(guess)
 
         if (i and guess[i] > guess[i - 1]) or n_ > n:
-            # if state is unordered, make it ordered, setting value to 0 and move to previous degree
-            # if current value is greater, than already found, also go to smaller numbers
+            # if state is unordered, make it ordered
+            # by setting value to 0 and move to previous degree
+
+            # if current value is greater, than already found,
+            # also go to smaller numbers
             guess[i] = 0
             i -= 1
             continue
 
         if divisors(guess) + 1 > 2 * s:
-            # looks good, if smaller than previous result, update it
+            # if smaller than previous result, update it
             if n_ < n:
                 result = guess[:]
                 n = n_
-            # we don't need to make number bigger, because it already has at least s solutions
+            # we don't need to make number bigger,
+            # because it already has at least s solutions
             guess[i] = 0
             i -= 1
         else:
@@ -57,6 +58,11 @@ def minimal(s):
 
 
 if __name__ == '__main__':
+    import sys
+
+    def to_string(degrees):
+        return ' • '.join(f'{p}^{d}' for p, d in zip(PRIMES, degrees) if d)
+
     s = int(sys.argv[1])
 
     result, iters = minimal(s)

@@ -1,5 +1,3 @@
-import sys
-
 from math import prod, log
 from itertools import product
 
@@ -28,5 +26,6 @@ def minimal(s):
 
 
 if __name__ == '__main__':
+    import sys
     s = int(sys.argv[1])
     print(minimal(s))
