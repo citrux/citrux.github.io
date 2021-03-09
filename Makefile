@@ -8,6 +8,7 @@ site: site.hs
 	ghc -dynamic --make site
 
 clean:
+	rm ./site
 	rm -rf _cache
-	rm -rf ../master/*
+	rm -rf ../www/*
 
