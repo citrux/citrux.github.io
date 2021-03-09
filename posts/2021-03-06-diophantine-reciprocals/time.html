@@ -5,6 +5,21 @@
     font-size: 14px;
   }
 
+  .svg-tooltip {
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple   Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background: rgba(69,77,93,.9);
+    border-radius: .1rem;
+    color: #fff;
+    display: block;
+    font-size: 11px;
+    max-width: 320px;
+    padding: .2rem .4rem;
+    position: absolute;
+    text-overflow: ellipsis;
+    white-space: pre;
+    z-index: 300;
+    visibility: hidden;
+  }
 
 @media only screen and (prefers-color-scheme: dark) {
   body {
@@ -95,6 +110,14 @@ function formatPower(x) {
   return `10${(e + "").replace(/./g, c => "⁰¹²³⁴⁵⁶⁷⁸⁹"[c] || "⁻")}`;
 }
 
+function format(x) {
+  const e = Math.floor(Math.log10(x));
+  const m = x / 10 ** e;
+  if (e >= -2 && e < 2) {return x;}
+  const prefix = (m == 1) ? "" : (d3.format(".2f")(m) + "•");
+  return prefix + `10${(e + "").replace(/./g, c => "⁰¹²³⁴⁵⁶⁷⁸⁹"[c] || "⁻")}`;
+}
+
 // Add Y axis
 var y = d3.scaleLog()
   .domain(d3.extent(approx, i => i[1]))
@@ -112,6 +135,11 @@ svg.append("path")
     .y(i => y(i[1]))
     )
 
+const tooltip = d3.select("body").append("div")
+  .attr("class", "svg-tooltip")
+    .style("position", "absolute")
+    .style("visibility", "hidden")
+
 svg.append("g")
       .attr("fill", "currentColor")
       .attr("class", "data")
@@ -121,7 +149,18 @@ svg.append("g")
     .join("circle")
       .attr("cx", i => x(i[0]))
       .attr("cy", i => y(i[1]))
-      .attr("r", 3);
+      .attr("r", 3)
+      .on("mouseover", function(event, d) {
+        tooltip.style("visibility", "visible");
+        d3.select(this).attr("opacity", 0.5);
+      })
+      .on("mousemove", (event, d) => tooltip.style("top", (event.pageY-10)+"px")
+                                           .style("left",(event.pageX+10)+"px")
+                                           .html("s:" + d[0] + "<br/>time: " + d3.format(".2s")(d[1]) + "s"))
+      .on("mouseout", function(event, d) {
+        tooltip.style("visibility", "hidden"),
+        d3.select(this).attr("opacity", 1);
+      });
 
 svg.append("text")
     .attr("fill", "currentColor")
