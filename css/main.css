@@ -49,6 +49,22 @@ body > footer.container {
   font-weight: bold;
 }
 
+.svg-tooltip {
+  background: rgba(69,77,93,.9);
+  border-radius: .1rem;
+  color: #fff;
+  display: block;
+  text-align: left;
+  font-size: 11px;
+  max-width: 320px;
+  padding: .2rem .4rem;
+  position: absolute;
+  text-overflow: ellipsis;
+  white-space: pre;
+  z-index: 300;
+  visibility: hidden;
+}
+
 @media only screen and (prefers-color-scheme: dark) {
     body {
         color: #ffffff;
