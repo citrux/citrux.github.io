@@ -10,8 +10,11 @@ parser.add_argument('-f', '--format', type=str, default='png')
 parser.add_argument('filename')
 args = parser.parse_args()
 
+rc('figure', figsize=(10, 8))
+
 if args.format == 'svg':
     rc('svg', fonttype='none')
+    rc('savefig', transparent=True)
 else:
     rc('font', family='serif')
     rc('text', usetex=True)
@@ -38,6 +41,15 @@ filepath = Path(args.filename)
 outname = filepath.parent / (filepath.stem + '.' + args.format)
 plt.savefig(outname)
 
+if args.format == 'svg':
+    import re
+
+    with open(outname, 'r') as f:
+        data = f.read()
+    data = re.sub('#000000', 'currentColor', data)
+    data = re.sub(r'font-(family|style|weight):[^;]+;', '', data)
+    with open(outname, 'w') as f:
+        f.write(data)
 
 # n(s)
 # x = list(range(1, 301))
