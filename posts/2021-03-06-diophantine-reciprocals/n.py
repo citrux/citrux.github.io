@@ -5,9 +5,10 @@ from pathlib import Path
 from matplotlib import pyplot as plt
 from matplotlib import rc
 
+from improved import minimal, number
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--format', type=str, default='png')
-parser.add_argument('filename')
 args = parser.parse_args()
 
 rc('figure', figsize=(10, 8))
@@ -21,24 +22,18 @@ else:
     rc('text', usetex=True)
     rc('text.latex', preamble=r'\usepackage[utf8]{inputenc}\usepackage[T2A]{fontenc}\usepackage[russian]{babel}')
 
-x, y = np.loadtxt(args.filename, skiprows=1, delimiter=',', unpack=True)
 
-p = np.polyfit(np.log(x), np.log(y), 2)
-
-xl = np.linspace(0, np.log(2*max(500, *x)), 100)
-yl = np.polyval(p, xl)
-
-xs = np.exp(xl)
-ys = np.exp(yl)
-
-plt.xlabel('Количество разложений')
-plt.ylabel('Время, с')
-plt.loglog(x, y, 'k+')
-plt.loglog(xs, ys, 'k-', lw=1)
+x = list(range(1, 301))
+y = [minimal(i) for i in x]
+y1, y2 = zip(*y)
+# plt.loglog(x, y2)
+# plt.show()
+plt.ylabel('Наименьшее $n$, для которого число разложений превышает $s$')
+plt.xlabel('Количество разложений $s$')
+plt.loglog(x, [number(ds) for ds in y1], 'k-', lw=1)
 plt.grid()
 
-filepath = Path(args.filename)
-outname = filepath.parent / (filepath.stem + '.' + args.format)
+outname = f'least_numbers.{args.format}'
 plt.savefig(outname)
 
 if args.format == 'svg':
