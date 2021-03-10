@@ -89,11 +89,11 @@ def minimal(s):
 
 Что-то долго считается. Давайте проведём замеры времени на меньших входных данных:
 
-ifdef::backend-html5
+ifdef::backend-html5[]
 image::time_naive.svg[]
 endif::[]
 
-ifndef::backend-html5
+ifndef::backend-html5[]
 image::time_naive.png[]
 endif::[]
 
@@ -217,11 +217,11 @@ def minimal(s):
 
 `minimal(1000)` выполняется за 9 с. Искомое число $180180 = 2^2 \cdot 3^2 \cdot 5^1 \cdot 7^1 \cdot 11^1 \cdot 13^1 $ имеет $ 5^2 \cdot 3^4 = 2025 $ делителей и, соответственно, 1013 способов разложения.
 
-ifdef::backend-html5
+ifdef::backend-html5[]
 image::time_total.svg[]
 endif::[]
 
-ifndef::backend-html5
+ifndef::backend-html5[]
 image::time_total.png[]
 endif::[]
 
@@ -300,10 +300,10 @@ def minimal(s):
 
 Этот подход, позволяет решить 110 задачу за 154 мс!
 
-ifdef::backend-html5
+ifdef::backend-html5[]
 image::time_improved.svg[]
 endif::[]
 
-ifndef::backend-html5
+ifndef::backend-html5[]
 image::time_improved.png[]
 endif::[]
