@@ -89,7 +89,13 @@ def minimal(s):
 
 Что-то долго считается. Давайте проведём замеры времени на меньших входных данных:
 
-image::time.png[scalewidth=100]
+ifdef::backend-html5
+image::time_naive.svg[]
+endif::[]
+
+ifndef::backend-html5
+image::time_naive.png[]
+endif::[]
 
 Для $ s=1000 $ вычисления должны занять $ \sim 10^4 $ секунд, т.е пару-тройку часов, что конечно не устраивает нас. Можно написать этот код на C, что позволит уложиться в приемлемое время для 1000, но проблему с 4000000 из 110 задачи это не решит.
 
@@ -211,7 +217,13 @@ def minimal(s):
 
 `minimal(1000)` выполняется за 9 с. Искомое число $180180 = 2^2 \cdot 3^2 \cdot 5^1 \cdot 7^1 \cdot 11^1 \cdot 13^1 $ имеет $ 5^2 \cdot 3^4 = 2025 $ делителей и, соответственно, 1013 способов разложения.
 
-image::time2.png[]
+ifdef::backend-html5
+image::time_total.svg[]
+endif::[]
+
+ifndef::backend-html5
+image::time_total.png[]
+endif::[]
 
 Мы смогли решить 108 задачу, но 110 таким способом явно не решить, нужно что-то получше. Проблема в том, что $ \displaystyle\prod_{i=1}^m \{0, 1,\ldots, \lceil \log_{p_i}n\rceil\} $ содержит огромное количество заведомо неподходящих наборов $ \{d_i\} $.
 
@@ -288,5 +300,10 @@ def minimal(s):
 
 Этот подход, позволяет решить 110 задачу за 154 мс!
 
-image::time3.png[]
+ifdef::backend-html5
+image::time_improved.svg[]
+endif::[]
 
+ifndef::backend-html5
+image::time_improved.png[]
+endif::[]
