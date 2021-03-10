@@ -126,8 +126,8 @@ endif::[]
 Функция ведёт себя очень интересно. Можно выделить числа с аномально большими значениями $ s(n) $ по отношению к своим соседям: $ 6,\ 12,\ 24,\ 30,\ 60,\ldots $ Также видно большие группы чисел с одинаковыми значениями. Например, $ s = 2 $ для $ 2,\ 3,\ 5,\ 7,\ 11,\ 13,\ 17,\ldots $ Нетрудно увидеть, что это простые числа. Действительно, у квадрата простого числа $ p $ только $ 3 $ делителя -- $ 1,\ p\ \text{и}\ p^2 $, поэтому $ p^2 = 1\cdot p^2 = p\cdot p $ и есть только 2 варианта разложения $ 1/p $:
 [env.equation]
 --
-\frac{1}{p} = \frac{1}{p+1}\ \frac{1}{p+p^2},\quad
-\frac{1}{p} = \frac{1}{2p}\ \frac{1}{2p}
+\frac{1}{p} = \frac{1}{p+1} + \frac{1}{p+p^2},\quad
+\frac{1}{p} = \frac{1}{2p} + \frac{1}{2p}
 --
 Ещё бросаются в глаза группы с $ s = 5 $ ($ 6,\ 10,\ 14,\ 15,\ 16,\ldots $) и $ s = 8 $ ($ 12,\ 18,\ 20,\ 28\ldots $).
 
@@ -202,31 +202,7 @@ print(n)
 
 [source,python]
 ----
-from math import prod, log
-from itertools import product
-
-PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
-
-
-def number(degrees):
-    return prod(p ** d for p, d in zip(PRIMES, degrees))
-
-
-def divisors(degrees):
-    return prod(2 * d + 1 for d in degrees)
-
-
-def minimal(s):
-    m = int(log(2*s)/log(3)) + 1
-    n = prod(PRIMES[:m])
-
-    ranges = [range(0, int(log(n) / log(PRIMES[i])) + 1) for i in range(m)]
-    for degrees in product(*ranges):
-        if divisors(degrees) > 2 * s - 1:
-            n_ = number(degrees)
-            if n_ < n:
-                n = n_
-    return n
+include::total.py[]
 ----
 
 Функция `product(*iterables)` возвращает итератор по декартову произведению множеств-аргументов. В нашем случае это позволяет нам перебрать наборы степеней простых множителей $ \{d_i\} $, являющиеся элементами пространства $ \displaystyle\prod_{i=1}^m \{0, 1,\ldots, \lceil \log_{p_i}n\rceil\} $.
@@ -257,63 +233,7 @@ s(12) = s(75) = (1 + (2 \cdot 2 + 1) \cdot (2 \cdot 1 + 1)) / 2 = 8
 
 [source,python]
 ----
-from math import prod
-
-PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41,
-          43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
-
-
-def number(degrees):
-    return prod(p ** d for p, d in zip(PRIMES, degrees))
-
-
-def divisors(degrees):
-    return prod(2 * d + 1 for d in degrees)
-
-
-def to_string(degrees):
-    return ' • '.join(f'{p}^{d}' for p, d in zip(PRIMES, degrees) if d)
-
-
-def minimal(s):
-    # constructive initial guess
-    result = []
-    while divisors(result) <= 2 * s - 1:
-        result.append(1)
-    n = number(result)
-    m = len(result)
-
-    # let's get it
-    i = 0
-    guess = [0] * m
-    while i > -1:
-        guess[i] += 1
-        n_ = number(guess)
-
-        if (i and guess[i] > guess[i - 1]) or n_ > n:
-            # if state is unordered, make it ordered by
-            # setting value to 0 and move to previous degree
-            #
-            # if current value is greater, than already found,
-            # also go to smaller prime factors
-            guess[i] = 0
-            i -= 1
-            continue
-
-        if divisors(guess) > 2 * s - 1:
-            # if smaller than previous result, update it
-            if n_ < n:
-                result = guess[:]
-                n = n_
-            # we don't need to make number bigger,
-            # because it already has at least s solutions
-            guess[i] = 0
-            i -= 1
-        else:
-            # not enough solutions, go to next factor
-            if i < m - 1:
-                i += 1
-    return result
+include::improved.py[]
 ----
 
 Этот подход, позволяет решить 110 задачу за 154 мс!
