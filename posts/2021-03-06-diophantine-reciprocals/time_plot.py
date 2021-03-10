@@ -46,8 +46,20 @@ if args.format == 'svg':
 
     with open(outname, 'r') as f:
         data = f.read()
-    data = re.sub('#000000', 'currentColor', data)
+
+    # remove height and width attributes for responsiveness
+    data = re.sub(r'(<svg [^>]*)height="[^"]+"', r'\1', data)
+    data = re.sub(r'(<svg [^>]*)width="[^"]+"', r'\1', data)
+
+    # use default font
     data = re.sub(r'font-(family|style|weight):[^;]+;', '', data)
+
+    # dark-mode support:
+    # set font color to currentColor
+    data = re.sub(r'(</style>)', r' text,tspan{fill:currentColor}\1', data)
+    # set black stroke to currentColor
+    data = re.sub('#000000', 'currentColor', data)
+
     with open(outname, 'w') as f:
         f.write(data)
 
