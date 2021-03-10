@@ -8,10 +8,13 @@ import           System.FilePath.Posix  (splitFileName)
 
 htmlCompiler :: Compiler (Item String)
 htmlCompiler = do
-    extension <- getUnderlyingExtension
+    path <- getResourceFilePath
+    let (dir,_) = splitFileName path
     getResourceString >>= withItemBody (unixFilter "asciidoctor-latex"
                                                   ["-b"
                                                   , "html5"
+                                                  , "-B"
+                                                  , dir
                                                   , "-s"
                                                   , "-a"
                                                   , "embedded"
