@@ -29,7 +29,7 @@ plt.xlabel('$n$')
 plt.ylabel('Количество разложений $s(n)$')
 ns = np.arange(1, 101)
 plt.grid(axis='y')
-plt.bar(ns, solutions(ns), 1, color='lightblue', edgecolor='k')
+plt.bar(ns, solutions(ns), 1, color='lightblue', edgecolor='gray', alpha=.8)
 
 outname = f'solutions.{args.format}'
 plt.savefig(outname)
