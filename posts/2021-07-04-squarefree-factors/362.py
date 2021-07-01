@@ -15,8 +15,8 @@ def count(n):
     return res
 
 
-def f(less_squareless_index, upper_bound):
-    stack = [(less_squareless_index, upper_bound)]
+def f(less_squarefree_index, upper_bound):
+    stack = [(less_squarefree_index, upper_bound)]
     while stack:
         i, n = stack[-1]
         if (i, n) in F:
