@@ -7,6 +7,7 @@ SQUAREFREE = []
 SQUAREFREE_FLAGS = []
 F = {}
 
+
 @cache
 def count(n):
     res = n - 1

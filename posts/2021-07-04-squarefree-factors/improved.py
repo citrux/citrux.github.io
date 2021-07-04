@@ -27,10 +27,33 @@ def squarefree_sieve(n):
     return [i for i, is_prime in enumerate(flags) if is_prime]
 
 
+F = {}
+
+
 def f(i, n):
-    if i >= len(SQUAREFREE) or SQUAREFREE[i] > n:
-        return 0
-    return 1 + f(i, n // SQUAREFREE[i]) + f(i + 1, n)
+    stack = [(i, n)]
+    while stack:
+        i, n = stack[-1]
+        if (i, n) in F:
+            stack.pop()
+            continue
+
+        if i >= len(SQUAREFREE) or SQUAREFREE[i] > n:
+            F[(i, n)] = 0
+            stack.pop()
+            continue
+
+        x = F.get((i, n // SQUAREFREE[i]))
+        y = F.get((i + 1, n))
+
+        if x is None:
+            stack.append((i, n // SQUAREFREE[i]))
+            continue
+        if y is None:
+            stack.append((i + 1, n))
+            continue
+        F[(i, n)] = 1 + x + y
+    return F[(i, n)]
 
 
 def s(n):
