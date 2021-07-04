@@ -1,6 +1,7 @@
 import sys
 
 SQUAREFREE = []
+F = {}
 
 
 def sieve(n):
@@ -27,9 +28,6 @@ def squarefree_sieve(n):
             flags[i * p] = flags[i]
 
     return [i for i, is_prime in enumerate(flags) if is_prime]
-
-
-F = {}
 
 
 def f(i, n):
@@ -59,6 +57,7 @@ def f(i, n):
 
 
 def s(n):
+    F.clear()
     SQUAREFREE[:] = squarefree_sieve(n)
     return f(0, n)
 

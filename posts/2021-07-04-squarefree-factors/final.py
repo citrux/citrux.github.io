@@ -1,5 +1,5 @@
 import sys
-from functools import cache
+from functools import lru_cache
 
 
 SQUAREFREE = []
@@ -32,7 +32,7 @@ def squarefree_signs(n):
     return s
 
 
-@cache
+@lru_cache(maxsize=None)
 def count(n):
     result = n - 1
     for i, sign in enumerate(SQUAREFREE_SIGNS):
@@ -71,7 +71,8 @@ def f(i, n):
 
 
 def s(n):
-    SQUAREFREE_SIGNS[:] = squarefree_signs(int(n ** 0.5) + 1)
+    F.clear()
+    SQUAREFREE_SIGNS[:] = squarefree_signs(int(n ** 0.5) + 4)
     SQUAREFREE[:] = [i for i, s in enumerate(SQUAREFREE_SIGNS) if s]
 
     return f(0, n)
