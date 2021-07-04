@@ -1,3 +1,5 @@
+import sys
+
 SQUAREFREE = []
 
 
@@ -34,10 +36,10 @@ def f(i, n):
 
 
 def s(n):
+    SQUAREFREE[:] = squarefree_sieve(n)
     return f(0, n)
 
 
 if __name__ == '__main__':
-    n = int(input())
-    SQUAREFREE = squarefree_sieve(n)
+    n = int(sys.argv[1])
     print(s(n))

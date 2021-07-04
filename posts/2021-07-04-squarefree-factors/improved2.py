@@ -1,6 +1,9 @@
 import sys
+from functools import cache
 
 SQUAREFREE = []
+PRIMES = []
+F = {}
 
 
 def sieve(n):
@@ -29,7 +32,22 @@ def squarefree_sieve(n):
     return [i for i, is_prime in enumerate(flags) if is_prime]
 
 
-F = {}
+def g(i, n):
+    if PRIMES[i] * PRIMES[i] > n:
+        return 0
+
+    k = n // (PRIMES[i] * PRIMES[i])
+    return k - sum(g(j, k) for j in range(i))
+
+
+@cache
+def count(n):
+    nonsquarefree_count = 1
+    for i, p in enumerate(PRIMES):
+        if p * p > n:
+            break
+        nonsquarefree_count += g(i, n)
+    return n - nonsquarefree_count
 
 
 def f(i, n):
@@ -42,6 +60,11 @@ def f(i, n):
 
         if i >= len(SQUAREFREE) or SQUAREFREE[i] > n:
             F[(i, n)] = 0
+            stack.pop()
+            continue
+
+        if SQUAREFREE[i] * SQUAREFREE[i] > n:
+            F[(i, n)] = count(n) - i
             stack.pop()
             continue
 
@@ -59,6 +82,7 @@ def f(i, n):
 
 
 def s(n):
+    PRIMES[:] = sieve(n)
     SQUAREFREE[:] = squarefree_sieve(n)
     return f(0, n)
 
