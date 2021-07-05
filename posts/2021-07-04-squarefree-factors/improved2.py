@@ -1,5 +1,5 @@
 import sys
-from functools import lru_cache
+from functools import cache
 
 SQUAREFREE = []
 PRIMES = []
@@ -40,7 +40,7 @@ def g(i, n):
     return k - sum(g(j, k) for j in range(i))
 
 
-@lru_cache(maxsize=None)
+@cache
 def count(n):
     nonsquarefree_count = 1
     for i, p in enumerate(PRIMES):
