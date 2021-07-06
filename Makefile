@@ -10,5 +10,4 @@ site: site.hs
 clean:
 	rm ./site
 	rm -rf _cache
-	rm -rf ../www/*
-
+	rm -rf _site/

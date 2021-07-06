@@ -24,12 +24,6 @@ htmlCompiler = do
 
 
 --------------------------------------------------------------------------------
-config :: Configuration
-config = defaultConfiguration
-    { destinationDirectory = "../www"
-    }
-
---------------------------------------------------------------------------------
 -- Replace url of the form foo/bar/index.html by foo/bar.
 removeIndexHtml :: Item String -> Compiler (Item String)
 removeIndexHtml item = return $ fmap (withUrls removeIndexStr) item
@@ -44,7 +38,7 @@ removeIndexHtml item = return $ fmap (withUrls removeIndexStr) item
 
 --------------------------------------------------------------------------------
 main :: IO ()
-main = hakyllWith config $ do
+main = hakyll $ do
     match "images/*" $ do
         route   idRoute
         compile copyFileCompiler
