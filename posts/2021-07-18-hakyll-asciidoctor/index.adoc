@@ -1,0 +1,14 @@
+---
+katex: false
+title: Hakyll, asciidoctor и KaTeX
+author: citrux
+---
+= Hakyll, asciidoctor и KaTeX
+citrux
+18.07.2021
+:toc: macro
+
+[abstract]
+--
+Сегодня разбавим решения задач с Project Euler статьёй о том, как можно приготовить блог с использованием таких популярных языков, как Haskell, Ruby и Javascript. Выясним, почему AsciiDoc круче, чем Markdown, а Hakyll на голову выше Jekyll.
+--
