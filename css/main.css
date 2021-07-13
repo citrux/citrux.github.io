@@ -65,6 +65,11 @@ body > footer.container {
   visibility: hidden;
 }
 
+/* fix asciidoc li>p look with inline list-style from skeleton */
+li > p {
+    display: inline-block;
+}
+
 @media only screen and (prefers-color-scheme: dark) {
     body {
         color: #ffffff;
