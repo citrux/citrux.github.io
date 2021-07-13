@@ -12,3 +12,176 @@ citrux
 --
 Сегодня разбавим решения задач с Project Euler статьёй о том, как можно приготовить блог с использованием таких популярных языков, как Haskell, Ruby и Javascript. Выясним, почему AsciiDoc круче, чем Markdown, а Hakyll на голову выше Jekyll.
 --
+
+Обычно я пишу про что-то связанное с математикой, и для этого мне нужна поддержка формул. Markdown заставляет экранировать латеховские бэкслеши в начале команд, что неудобно.
+
+Захотелось мне странного -- попробовать AsciiDoc вместо markdown для написания постов в блоге. А в Jekyll это сделать оказалось не так-то просто.
+
+Решил посмотреть на hakyll, так как это скорее библиотека, чем приложение. Она предоставляет большие возможности настроек, так как ты сам описываешь процедуру построения сайта от начала и до конца.
+
+Стандартный вариант, генерируемый командой `hakyll-init` выглядит так:
+
+[source,haskell]
+----
+--------------------------------------------------------------------------------
+{-# LANGUAGE OverloadedStrings #-}
+import           Data.Monoid (mappend)
+import           Hakyll
+
+
+--------------------------------------------------------------------------------
+main :: IO ()
+main = hakyll $ do
+    match "images/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
+    match "css/*" $ do
+        route   idRoute
+        compile compressCssCompiler
+
+    match (fromList ["about.rst", "contact.markdown"]) $ do
+        route   $ setExtension "html"
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= relativizeUrls
+
+    match "posts/*" $ do
+        route $ setExtension "html"
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= relativizeUrls
+
+    create ["archive.html"] $ do
+        route idRoute
+        compile $ do
+            posts <- recentFirst =<< loadAll "posts/*"
+            let archiveCtx =
+                    listField "posts" postCtx (return posts) `mappend`
+                    constField "title" "Archives"            `mappend`
+                    defaultContext
+
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+                >>= relativizeUrls
+
+
+    match "index.html" $ do
+        route idRoute
+        compile $ do
+            posts <- recentFirst =<< loadAll "posts/*"
+            let indexCtx =
+                    listField "posts" postCtx (return posts) `mappend`
+                    defaultContext
+
+            getResourceBody
+                >>= applyAsTemplate indexCtx
+                >>= loadAndApplyTemplate "templates/default.html" indexCtx
+                >>= relativizeUrls
+
+    match "templates/*" $ compile templateBodyCompiler
+
+
+--------------------------------------------------------------------------------
+postCtx :: Context String
+postCtx =
+    dateField "date" "%B %e, %Y" `mappend`
+    defaultContext
+----
+
+За генерацию html-страниц с постами отвечают вот эти строчки
+[source,haskell]
+----
+match "posts/*" $ do
+    route $ setExtension "html"
+    compile $ pandocCompiler
+        >>= loadAndApplyTemplate "templates/post.html"    postCtx
+        >>= loadAndApplyTemplate "templates/default.html" postCtx
+        >>= relativizeUrls
+----
+Как видно, hakyll использует pandoc для преобразования форматов. Но сгенерировать html из asciidoc он не в состоянии, поэтому пришлось делать это так
+
+[source,haskell]
+----
+htmlCompiler :: Compiler (Item String)
+htmlCompiler = do
+    getResourceString >>= withItemBody (unixFilter "asciidoctor-latex"
+                                                  ["-b"
+                                                  , "html5"
+                                                  , "-s"
+                                                  , "-a"
+                                                  , "embedded"
+                                                  , "-a"
+                                                  , "skip-front-matter"
+                                                  , "-"])
+
+...
+
+    match "posts/*" $ do
+        route $ setExtension "html"
+        compile $ htmlCompiler
+            >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= relativizeUrls
+----
+
+Далее мне захотелось, чтобы материалы, относящиеся к посту (картинки, код) лежали в каталоге этого поста. В результате получилось следующее
+
+[source,haskell]
+----
+htmlCompiler :: Compiler (Item String)
+htmlCompiler = do
+    path <- getResourceFilePath
+    let (dir,_) = splitFileName path
+    getResourceString >>= withItemBody (unixFilter "asciidoctor-latex"
+                                                  ["-b"
+                                                  , "html5"
+                                                  , "-B"
+                                                  , dir
+                                                  , "-s"
+                                                  , "-a"
+                                                  , "embedded"
+                                                  , "-a"
+                                                  , "skip-front-matter"
+                                                  , "-"])
+
+...
+
+    match "posts/*/index.adoc" $ do
+        route $ setExtension "html"
+        compile $ htmlCompiler
+            >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= relativizeUrls
+
+    match "posts/**/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+----
+
+Ну и чтобы избавиться от `index.html` в конце ссылок
+
+[source,haskell]
+----
+removeIndexHtml :: Item String -> Compiler (Item String)
+removeIndexHtml item = return $ fmap (withUrls removeIndexStr) item
+    where
+        removeIndexStr :: String -> String
+        removeIndexStr url = case splitFileName url of
+                                (dir, "index.html") | isLocal dir -> dir
+                                _                                 -> url
+        isLocal :: String -> Bool
+        isLocal uri        = not (isInfixOf "://" uri)
+
+...
+
+    match "posts/*/index.adoc" $ do
+        route $ setExtension "html"
+        compile $ htmlCompiler
+            >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= relativizeUrls
+            >>= removeIndexHtml
+----
