@@ -92,7 +92,7 @@ E = \sum_n \frac{p_n^2}{2m} + \frac{\kappa(x_n - x_{n+1})^2}{2} = \sum_n \frac{p
 --
 K_{mn} = \frac{\kappa}{2}\begin{pmatrix}
 \ddots &  &  \\
- -1 & 1 & -1 \\
+ -1 & 2 & -1 \\
  &  & \ddots \\
 \end{pmatrix}
 --
@@ -124,10 +124,150 @@ E = \sum_n \frac{1}{2m} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{
 меняя порядок суммирования и интегрирования, получаем
 [env.equation]
 --
-E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} \left[ \tilde{p}(k)\tilde{p}(k') \frac{2\pi}{a} \delta(k+k') + \frac{2\pi}{a}\delta(k+k')\tilde{K}^* (k) \tilde{x}(k)\tilde{x}(k')\right] = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \tilde{p}(k)\tilde{p}(-k) + \tilde{K}^*(k) \tilde{x}(k)\tilde{x}(-k)\right]
+E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}(k') \frac{2\pi}{a} \delta(k+k') + \frac{2\pi}{a}\delta(k+k')\tilde{K}^* (k) \tilde{x}(k)\tilde{x}(k')\right] = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}(-k) + \tilde{K}^* (k) \tilde{x}(k)\tilde{x}(-k)\right]
 --
 Так как $p$ и $x$ -- действительные величины, то $\tilde{x}(-k) = \tilde{x}^* (k)$ и $\tilde{p}(-k) = \tilde{p}^* (k)$, поэтому
 [env.equation]
 --
-E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \tilde{p}(k)\tilde{p}^* (k) + \tilde{K}^* (k) \tilde{x}(k)\tilde{x}^* (k) \right].
+E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}^* (k) + \tilde{K}^* (k) \tilde{x}(k)\tilde{x}^* (k) \right].
+--
+Посмотрим внимательнее на $\tilde{K}(k)$:
+[env.equation]
+--
+\tilde{K}(k) = \sum_l K_{l,0} e^{-ikal} = \frac{\kappa}{2}(-e^{ika} + 2 - e^{-ika}) = \kappa(1 - \cos ka)
+--
+
+== Квантование гармонического осциллятора
+В квантовой механие состояние системы описывается уравнением Шрёдингера:
+[env.equation]
+--
+ih\frac{\partial \Psi(x, t)}{\partial t} = H\Psi(x, t)
+--
+Здесь $H$ -- гамильтониан системы. По сути своей он совпадает с выражением для энергии системы, с той лишь разницей, что вместо координат и имнульсов в него входях их операторы. Так, в случае гармонического осциллятора
+[env.equation]
+--
+H = \frac{p^2}{2m} + \frac{m\omega^2 x^2}{2}
+--
+Так как в нашем случае гамильтониан не зависит явно от времени, то можно разделить переменные $\Psi(x, t) = \psi(x) \exp\left(-i\frac{Et}{\hbar}\right)$, где $E$ -- собственное значение гамильтониана, соответствующее собственному состоянию $\psi(x)$:
+[env.equation]
+--
+H\psi = E\psi.
+--
+Оператор импульса имеен вид
+[env.equation]
+--
+p = -ih\frac{\partial}{\partial x},
+--
+поэтому задача на собственные значения принимает вид
+[env.equation]
+--
+\left(-\frac{\hbar^2}{2m} \frac{\partial^2}{\partial x^2} + \frac{m\omega^2 x^2}{2}\right)\psi = E\psi
+--
+Можно и дальше решать это уравнение, но это не наш путь. Это уравнение второго порядка, давайте попробуем что-нибудь с ним сделать. Вообще гамильтониан сильно похож на разность квадратов, поэтому почему бы не представить его в виде произведения двух операторов. Пусть
+[env.equation]
+--
+a = \sqrt{\frac{m\omega}{2\hbar}} x + \sqrt{\frac{\hbar}{2m\omega}} \frac{\partial}{\partial x},
+a^\dagger = \sqrt{\frac{m\omega}{2\hbar}} x - \sqrt{\frac{\hbar}{2m\omega}} \frac{\partial}{\partial x},
+--
+тогда
+[env.equation]
+--
+aa^\dagger = \frac{m\omega}{2\hbar}x^2 - \frac{\hbar}{2m\omega}{\partial^2}{\partial x^2} + \frac{1}{2}\left(\frac{\partial}{\partial x} x - x\frac{\partial}{\partial x}\right)
+--
+Заметим, что
+[env.equation]
+--
+\frac{\partial}{\partial x} x \psi = \psi + x \frac{\partial}{\partial x}\psi = (1 + x \frac{\partial}{\partial x})\psi,
+--
+поэтому
+[env.equation]
+--
+aa^\dagger = \frac{m\omega}{2\hbar}x^2 - \frac{\hbar}{2m\omega}\frac{\partial^2}{\partial x^2} + \frac{1}{2}
+--
+Аналогично
+[env.equation]
+--
+a^\dagger a = \frac{m\omega}{2\hbar}x^2 - \frac{\hbar}{2m\omega}\frac{\partial^2}{\partial x^2} - \frac{1}{2}
+--
+и получаем ещё одно интересное уравнение
+[env.equation]
+--
+aa^\dagger - a^\dagger a = 1.
+--
+Уравнение на собственные значения принимает вид
+[env.equation]
+--
+\hbar\omega\left(a^\dagger a + \frac{1}{2}\right)\psi = E\psi
+--
+откуда
+[env.equation]
+--
+a^\dagger a\psi = \left(\frac{E}{\hbar\omega} - \frac{1}{2}\right)\psi = \lambda\psi
+--
+Пусть $\psi_n$ -- собственная функция гамильтониана, а $E_n$ -- соответствующее собственное значение
+[env.equation]
+--
+a^\dagger a\psi_n = \lambda_n\psi_n
+--
+
+[env.equation]
+--
+a a^\dagger a\psi_n = \lambda_n a\psi_n
+--
+
+[env.equation]
+--
+(a^\dagger a + 1) (a\psi_n) = \lambda_n (a\psi_n)
+--
+
+[env.equation]
+--
+a^\dagger a (a\psi_n) = (\lambda_n-1) (a\psi_n)
+--
+То есть $a\psi_n$ тоже собственная функция гамильтониана с собственным значением $E_n - \hbar\omega$. Теперь поменяем порядок операторов и провернув всё тот же трюк, получим
+[env.equation]
+--
+a^\dagger a (a^\dagger\psi_n) = (\lambda_n+1) (a^\dagger\psi_n)
+--
+$a^\dagger\psi_n$ тоже собственная функция гамильтониана, но с собственным значением $E_n + \hbar\omega$.
+
+Воспользуемся теперь свойством эрмитово-сопряженного оператора:
+[env.equation]
+--
+\int dx \psi_n^* a^\dagger a\psi_n = \lambda_n\int dx \psi_n^* \psi_n
+--
+[env.equation]
+--
+\int dx |a\psi_n|^2 = \lambda_n
+--
+Так как функция под интегралом всюду неотрицательна, то $\lambda_n \ge 0$. Предположим теперь, что существует состояние с энергией $E_k$, соответствующее нецелому значению $\lambda_k$. Тогда последовательно применяя оператор $a$ к функции $\psi_k$ можно в определённый момент получить функцию
+$\psi_m = a^{\lceil\lambda_k\rceil}\psi_k$ с собственным значением $\lambda_m = \lambda_k - \lceil\lambda_k\rceil < 0$. Но это противоречит условию $\lambda_n \ge 0$, поэтому $\lambda_n$ может принимать только целые неотрицательные значения. Начнём нумерацию с нуля и положим
+[env.equation]
+--
+\lambda_n = n.
+--
+Тогда, $E_0=\hbar\omega/2$ является собственным значением. Найдём соответстующую собственную функцию $\psi_0$ из условия
+[env.equation]
+--
+\int dx |a\psi_0|^2 = \lambda_0 = 0.
+--
+Это возможно только если
+[env.equation]
+--
+a\psi_0 = 0.
+--
+Получаем уравнение
+[env.equation]
+--
+\sqrt{\frac{m\omega}{2\hbar}} x \psi_0 + \sqrt{\frac{\hbar}{2m\omega}} \frac{\partial\psi_0}{\partial x} = 0
+--
+Преобразуем его
+[env.equation]
+--
+\frac{\partial\psi_0}{\partial x} = -\frac{m\omega}{\hbar} x \psi_0.
+--
+Разделив переменные и проинтегрировав, получаем
+[env.equation]
+--
+\psi_0 = C\exp\left(-\frac{m\omega x^2}{\hbar}\right).
 --
