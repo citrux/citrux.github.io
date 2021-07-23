@@ -1,0 +1,133 @@
+---
+katex: true
+title: Фононы
+author: citrux
+---
+= Фононы
+citrux
+1.08.2021
+:toc: macro
+:toc-title: Содержание
+
+[abstract]
+--
+Рассмотрим колебания решётки как ансамбль гармонических осцилляторов, заквантуем колебания, поговорим о вторичном квантовании и получим операторы смещений и импульсов в представлении вторичного квантования
+--
+
+toc::[]
+
+== Колебания одномерной цепочки
+
+Начнём с одномерной цепочки связанных осцилляторов. Пусть это будут соединённые пружинками жесткостью $\kappa$ грузики массой $m$, расположенные друг от друга на расстоянии $a$. Рассмотрим уравнение движения $n$-го грузика:
+
+[env.equation]
+--
+m\ddot{x}_n = \kappa(x_{n+1} - x_n) + \kappa(x_{n-1} - x_n)
+--
+
+[env.equation]
+--
+\ddot{x}_n = \frac{\kappa}{m}(x_{n-1} - 2x_n + x_{n+1})
+--
+
+Введём обозначение $\kappa/m = \omega_0^2$:
+
+[env.equation]
+--
+\ddot{x}_n = \omega_0^2 (x_{n-1} - 2x_n + x_{n+1})
+--
+
+Это система линейных дифференциальных уравнений второго порядка, поэтому решение имеет вид $x_n = a_n \exp(-i\omega t) + a_n^* \exp(i\omega t)$. Подставим решение в уравнение и получим систему уравнений:
+
+[env.equation]
+--
+-\omega^2 a_n = \omega_0^2 (a_{n-1} - 2a_n + a_{n+1})
+--
+
+Так как цепочка бесконечна, а уравнения движения не зависят от $n$, то на любом её участке должны происходить колебания с одной и той же амплитудой. Так как колебания происходят с одной и той же частотой, то сдвиг фаз между соседними осцилляторами будет сохраняться. Обозначим его $\phi$ и подставим в уравнение соотношение $a_{n+1} = a_n \exp(i\phi)$:
+
+[env.equation]
+--
+-\omega^2 a_n = \omega_0^2 (a_n\exp(i\phi) - 2a_n + a_n\exp(i\phi)) = 2\omega_0^2 a_n(\cos\phi - 1)
+--
+
+[env.equation]
+--
+-\omega^2 a_n = \omega_0^2 (a_n\exp(i\phi) - 2a_n + a_n\exp(i\phi)) = 2\omega_0^2 a_n(\cos\phi - 1)
+--
+
+[env.equation]
+--
+\omega^2 = 4\omega_0^2 \sin^2 \frac{\phi}{2}
+--
+
+В силу соотношения $a_{n+1} = a_n \exp(i\phi)$ имеем
+
+[env.equation]
+--
+a_n = a_0\exp(i n \phi) = a_0 \exp(ikan),
+--
+
+То есть в цепочке распространяется волна
+[env.equation]
+--
+x_n = a_0 \exp[i(kan - \omega t)] + a_0^* \exp[-i(kan - \omega t)] = 2a_0\cos(kan-\omega t + \phi_0)
+--
+
+частота которой связвнв с волновым вектором соотношением
+[env.equation]
+--
+\omega = 2\omega_0\sin\frac{|k|a}{2}
+--
+
+== Энергетический подход
+
+Посмотрим теперь на задачу с другой стороны. Запишем теперь энергию цепочки
+[env.equation]
+--
+E = \sum_n \frac{p_n^2}{2m} + \frac{\kappa(x_n - x_{n+1})^2}{2} = \sum_n \frac{p_n^2}{2m} + \sum_{m,n} K_{mn} x_m x_n,
+--
+где
+[env.equation]
+--
+K_{mn} = \frac{\kappa}{2}\begin{pmatrix}
+\ddots &  &  \\
+ -1 & 1 & -1 \\
+ &  & \ddots \\
+\end{pmatrix}
+--
+
+Если бы матрица $K_{mn}$ была диагональной, то осцилляторы были бы независимыми и их колебания можно было бы рассматривать по отдельности. Но $K_{mn}$ не диагональная, однако, её можно привести к диагональному виду.
+
+Заметим, что $K_{mn} = K_{m-n,0}$, так как она обладает трансляционной симметрией. Сделаем над ней преобразование Фурье:
+
+[env.equation]
+--
+\tilde{K}(k, k') = \sum_{m,n} K_{mn} e^{-ikam-ik'an} = [l = m-n] = \sum_l K_{l,0} e^{-ikal} \sum_n e^{-i(k' + k)an} = \tilde{K}(k) \sum_{n=-\infty}^{+\infty} e^{-i(k'+k)an} = \frac{2\pi}{a}\tilde{K}(k)\delta(k+k')
+--
+
+Она диагонализировалась! При этом собственным вектором выступает Фурье-образ сеточной функции $x_n$:
+[env.equation]
+--
+\tilde{x}(k) = \sum x_n e^{-ikan},
+--
+при этом обратное преобразование имеет вид
+[env.equation]
+--
+x_n = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \tilde{x}(k) e^{ikan}.
+--
+Так как $p_n = m\dot{x}_n$, то $\tilde{p}(k) = m\dot{\tilde{x}}(k)$. Подставляя эти выражения для $p_n$ и $x_n$, получаем
+[env.equation]
+--
+E = \sum_n \frac{1}{2m} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} \tilde{p}(k)\tilde{p}(k') e^{i(k+k')an} + \sum_{m,n} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} K_{mn} \tilde{x}(k) e^{ikam} \tilde{x}(k') e^{ik'an},
+--
+меняя порядок суммирования и интегрирования, получаем
+[env.equation]
+--
+E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} \left[ \tilde{p}(k)\tilde{p}(k') \frac{2\pi}{a} \delta(k+k') + \frac{2\pi}{a}\delta(k+k')\tilde{K}^* (k) \tilde{x}(k)\tilde{x}(k')\right] = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \tilde{p}(k)\tilde{p}(-k) + \tilde{K}^*(k) \tilde{x}(k)\tilde{x}(-k)\right]
+--
+Так как $p$ и $x$ -- действительные величины, то $\tilde{x}(-k) = \tilde{x}^* (k)$ и $\tilde{p}(-k) = \tilde{p}^* (k)$, поэтому
+[env.equation]
+--
+E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \tilde{p}(k)\tilde{p}^* (k) + \tilde{K}^* (k) \tilde{x}(k)\tilde{x}^* (k) \right].
+--
