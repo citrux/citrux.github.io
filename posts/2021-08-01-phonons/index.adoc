@@ -16,6 +16,7 @@ citrux
 
 toc::[]
 
+
 == Колебания одномерной цепочки
 
 Начнём с одномерной цепочки связанных осцилляторов. Пусть это будут соединённые пружинками жесткостью $\kappa$ грузики массой $m$, расположенные друг от друга на расстоянии $a$. Рассмотрим уравнение движения $n$-го грузика:
@@ -103,7 +104,9 @@ K_{mn} = \frac{\kappa}{2}\begin{pmatrix}
 
 [env.equation]
 --
-\tilde{K}(k, k') = \sum_{m,n} K_{mn} e^{-ikam-ik'an} = [l = m-n] = \sum_l K_{l,0} e^{-ikal} \sum_n e^{-i(k' + k)an} = \tilde{K}(k) \sum_{n=-\infty}^{+\infty} e^{-i(k'+k)an} = \frac{2\pi}{a}\tilde{K}(k)\delta(k+k')
+\begin{gathered}
+\tilde{K}(k, k') = \sum_{m,n} K_{mn} e^{-ikam-ik'an} = [l = m-n] = \sum_l K_{l,0} e^{-ikal} \sum_n e^{-i(k' + k)an} = \\ = \tilde{K}(k) \sum_{n=-\infty}^{+\infty} e^{-i(k'+k)an} = \frac{2\pi}{a}\tilde{K}(k)\delta(k+k')
+\end{gathered}
 --
 
 Она диагонализировалась! При этом собственным вектором выступает Фурье-образ сеточной функции $x_n$:
@@ -124,7 +127,9 @@ E = \sum_n \frac{1}{2m} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{
 меняя порядок суммирования и интегрирования, получаем
 [env.equation]
 --
-E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}(k') \frac{2\pi}{a} \delta(k+k') + \frac{2\pi}{a}\delta(k+k')\tilde{K}^* (k) \tilde{x}(k)\tilde{x}(k')\right] = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}(-k) + \tilde{K}^* (k) \tilde{x}(k)\tilde{x}(-k)\right]
+\begin{gathered}
+E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}(k') \frac{2\pi}{a} \delta(k+k') + \frac{2\pi}{a}\delta(k+k')\tilde{K}^* (k) \tilde{x}(k)\tilde{x}(k')\right] = \\ = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}(-k) + \tilde{K}^* (k) \tilde{x}(k)\tilde{x}(-k)\right]
+\end{gathered}
 --
 Так как $p$ и $x$ -- действительные величины, то $\tilde{x}(-k) = \tilde{x}^* (k)$ и $\tilde{p}(-k) = \tilde{p}^* (k)$, поэтому
 [env.equation]
@@ -270,4 +275,75 @@ a\psi_0 = 0.
 [env.equation]
 --
 \psi_0 = C\exp\left(-\frac{m\omega x^2}{\hbar}\right).
+--
+
+== Фононы
+
+Заквантуем теперь колебания одномерной цепочки. Гамильтониан, совпадающий по форме с выражением для энергии, имеет вид
+[env.equation]
+--
+H = \sum_n \frac{p_n^2}{2m} + \sum_{m,n} K_{mn} x_m x_n.
+--
+Конкретный вид $K_{mn}$ нас даже не будет интересовать, так как из условия задачи она обладает свойством $K_{mn} = K_{m+l,n+l}$ и симметрична $K_{mn} = K_{nm}$. Выполним преобразование Фурье
+[env.equation]
+--
+H = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}^* (k) + \tilde{K}(k) \tilde{x}(k)\tilde{x}^* (k) \right].
+--
+Обозначим для удобства
+[env.equation]
+--
+\tilde{K}(k) = \frac{m\omega^2 (k)}{2}
+--
+Так как у нас тут система развалилась в набор осцилляторов, воспользуемся операторами рождения и уничтожения
+[env.equation]
+--
+a(k) = \sqrt{\frac{m\omega(k)}{2\hbar}}\tilde{x}(k) + \frac{i}{\sqrt{2m\hbar\omega(k)}}\tilde{p}(k),\quad
+a^\dagger (k) = \sqrt{\frac{m\omega(k)}{2\hbar}}\tilde{x}^* (k) - \frac{i}{\sqrt{2m\hbar\omega(k)}}\tilde{p}^* (k)
+--
+Выразим операторы координат и импульсов через операторы рождения и уничтожения:
+[env.equation]
+--
+\tilde{x}(k) = \sqrt\frac{2\hbar}{m\omega(k)} \frac{a(k) + a^\dagger (-k)}{2},\quad
+\tilde{p}(k) = -i \sqrt{2m\hbar\omega(k)} \frac{a(k) - a^\dagger (-k)}{2}
+--
+Подставляем в гамильтониан
+[env.equation]
+--
+H = \hbar\omega(k) \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[
+\frac{a(k) - a^\dagger (-k)}{2}\frac{a(-k) - a^\dagger (k)}{2}
+ + \frac{a(k) + a^\dagger (-k)}{2}\frac{a(-k) + a^\dagger (k)}{2}
+\right],
+--
+и упрощаем
+[env.equation]
+--
+H = \hbar\omega(k) \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi}
+\frac{a(k)a^\dagger (k) + a^\dagger (-k)a(-k)}{2} =
+\hbar\omega(k) \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \frac{a(k)a^\dagger (k) + a^\dagger (k)a(k)}{2}.
+--
+Рассмотрим коммутатор $[a(k), a^\dagger (k')]$:
+[env.equation]
+--
+[a(k), a^\dagger (k')] = -\frac{i}{2\hbar}\sqrt\frac{\omega(k)}{\omega(k')} [\tilde{x}(k), \tilde{p}^* (k')] - \frac{i}{2\hbar}\sqrt\frac{\omega(k')}{\omega(k)} [\tilde{p}(k), \tilde{x}^* (k')] = \frac{2\pi}{a}\delta(k-k')
+--
+Опуская в гамильтониане бесконечное слагаемое, обусловленное энергией $\hbar\omega(k)/2$ нулевого состояния каждой из несчётного числа фононных мод, получаем
+[env.equation]
+--
+H = \hbar\omega(k) \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} a^\dagger (k)a(k).
+--
+А операторы импульсов и координат в представлении вторичного квантования имеют вид
+[env.equation]
+--
+x_n = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \sqrt\frac{2\hbar}{m\omega(k)} \frac{a(k) + a^\dagger (-k)}{2} e^{ikan} =
+\int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \sqrt\frac{\hbar}{2m\omega(k)} \left[a(k) e^{ikan} + a^\dagger (k) e^{-ikan}\right]
+--
+[env.equation]
+--
+p_n = -i \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \sqrt{2m\hbar\omega(k)} \frac{a(k) - a^\dagger (-k)}{2} e^{ikan} =
+-i \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \sqrt\frac{m\hbar\omega(k)}{2} \left[a(k) e^{ikan} - a^\dagger (k) e^{-ikan}\right]
 --
