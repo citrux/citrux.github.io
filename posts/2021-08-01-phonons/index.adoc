@@ -33,12 +33,12 @@ m\ddot{x}_n = \kappa(x_{n+1} - x_n) + \kappa(x_{n-1} - x_n)
 
 Введём обозначение $\kappa/m = \omega_0^2$:
 
-[env.equation]
+[env.equation#eq1]
 --
 \ddot{x}_n = \omega_0^2 (x_{n-1} - 2x_n + x_{n+1})
 --
 
-Это система линейных дифференциальных уравнений второго порядка, поэтому решение имеет вид $x_n = a_n \exp(-i\omega t) + a_n^* \exp(i\omega t)$. Подставим решение в уравнение и получим систему уравнений:
+Это система линейных дифференциальных уравнений второго порядка, поэтому решение имеет вид $x_n = a_n \exp(-i\omega t) + a_n^* \exp(i\omega t)$footnote:[Так как $x$ -- действительная величина, то константы в решении должны быть комплексно сопряжены.]. Подставим решение в уравнение <<eq1>> и получим систему уравнений:
 
 [env.equation]
 --
@@ -46,11 +46,6 @@ m\ddot{x}_n = \kappa(x_{n+1} - x_n) + \kappa(x_{n-1} - x_n)
 --
 
 Так как цепочка бесконечна, а уравнения движения не зависят от $n$, то на любом её участке должны происходить колебания с одной и той же амплитудой. Так как колебания происходят с одной и той же частотой, то сдвиг фаз между соседними осцилляторами будет сохраняться. Обозначим его $\phi$ и подставим в уравнение соотношение $a_{n+1} = a_n \exp(i\phi)$:
-
-[env.equation]
---
--\omega^2 a_n = \omega_0^2 (a_n\exp(i\phi) - 2a_n + a_n\exp(i\phi)) = 2\omega_0^2 a_n(\cos\phi - 1)
---
 
 [env.equation]
 --
@@ -177,7 +172,7 @@ a^\dagger = \sqrt{\frac{m\omega}{2\hbar}} x - \sqrt{\frac{\hbar}{2m\omega}} \fra
 тогда
 [env.equation]
 --
-aa^\dagger = \frac{m\omega}{2\hbar}x^2 - \frac{\hbar}{2m\omega}{\partial^2}{\partial x^2} + \frac{1}{2}\left(\frac{\partial}{\partial x} x - x\frac{\partial}{\partial x}\right)
+aa^\dagger = \frac{m\omega}{2\hbar}x^2 - \frac{\hbar}{2m\omega}\frac{\partial^2}{\partial x^2} + \frac{1}{2}\left(\frac{\partial}{\partial x} x - x\frac{\partial}{\partial x}\right)
 --
 Заметим, что
 [env.equation]
