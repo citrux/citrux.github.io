@@ -1,9 +1,9 @@
 ---
 katex: true
-title: Фононы
+title: Фононы на минималках
 author: citrux
 ---
-= Фононы
+= Фононы на минималках
 citrux <369565@gmail.com>
 1.08.2021
 :toc: macro
@@ -11,14 +11,15 @@ citrux <369565@gmail.com>
 
 [abstract]
 --
-Рассмотрим колебания решётки как ансамбль гармонических осцилляторов, заквантуем колебания, поговорим о вторичном квантовании и получим операторы смещений и импульсов в представлении вторичного квантования
+Рассмотрим колебания решётки как ансамбль гармонических осцилляторов, заквантуем колебания, поговорим о вторичном квантовании, выясним что такое фононы, и, наконец, получим операторы смещений и импульсов атомов решётки в представлении вторичного квантования.
 --
 
 toc::[]
 
 
-== Колебания одномерной цепочки
+== Колебания решётки
 
+=== Колебания одномерной цепочки
 Начнём с одномерной цепочки связанных осцилляторов. Пусть это будут соединённые пружинками жесткостью $\kappa$ грузики массой $m$, расположенные друг от друга на расстоянии $a$. Рассмотрим уравнение движения $n$-го грузика:
 
 [env.equation]
@@ -137,137 +138,8 @@ E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \frac{1}{2m}
 \tilde{K}(k) = \sum_l K_{l,0} e^{-ikal} = \frac{\kappa}{2}(-e^{ika} + 2 - e^{-ika}) = \kappa(1 - \cos ka)
 --
 
-=== Две частицы в ячейке
-
-Теперь рассмотрим цепочку с двумя частицами в ячейке и с двумя различными жёскостями пружинок между ними:
-[env.equation]
---
-\left\{
-\begin{array}{l}
-m_1 \ddot{x}_{1, n} = \kappa_1(x_{2, n}-x_{1, n}) + \kappa_2(x_{2, n-1}-x_{1, n}),\\
-m_2 \ddot{x}_{2, n} = \kappa_1(x_{1, n}-x_{2, n}) + \kappa_2(x_{1, n+1}-x_{2, n}).\\
-\end{array}\right.
---
-Будем искать решение этой системы в виде плоских волн:
-[env.equation]
---
-\left\{
-\begin{array}{l}
-x_{1, n} = a_1 \exp[i(kan - \omega t)] + a_1^* \exp[-i(kan - \omega t)],\\
-x_{2, n} = a_2 \exp[i(kan - \omega t)] + a_2^* \exp[-i(kan - \omega t)].\\
-\end{array}\right.
---
-Подставляя решение в уравнения, получаем
-[env.equation]
---
-\left\{
-\begin{array}{l}
--m_1 a_1 \omega^2 \exp ikan = \kappa_1(a_2 \exp ikan - a_1 \exp ikan) + \kappa_2(a_2 \exp ika(n-1) - a_1 \exp ikan),\\
--m_2 a_2 \omega^2 \exp ikan = \kappa_1(a_1 \exp ikan - a_2 \exp ikan) + \kappa_2(a_1 \exp ika(n+1) - a_2 \exp ikan).\\
-\end{array}\right.
---
-[env.equation]
---
-\left\{
-\begin{array}{l}
--m_1 a_1 \omega^2  = \kappa_1(a_2 - a_1 ) + \kappa_2(a_2 \exp (-ika) - a_1),\\
--m_2 a_2 \omega^2  = \kappa_1(a_1 - a_2) + \kappa_2(a_1 \exp ika - a_2).\\
-\end{array}\right.
---
-[env.equation]
---
-\left\{
-\begin{array}{l}
-(\kappa_1 + \kappa_2 - m_1 \omega^2)a_1  = (\kappa_1 + \kappa_2 \exp (-ika)) a_2,\\
-(\kappa_1 + \kappa_2 - m_2 \omega^2)a_2  = (\kappa_1 + \kappa_2 \exp ika)a_1.\\
-\end{array}\right.
---
-Отсюда,
-[env.equation]
---
-(\kappa_1 + \kappa_2 - m_1 \omega^2)(\kappa_1 + \kappa_2 - m_2 \omega^2)  = (\kappa_1 + \kappa_2 \exp (-ika))(\kappa_1 + \kappa_2 \exp ika),\\
---
-[env.equation]
---
-(\kappa_1 + \kappa_2)^2 - (m_1+m_2)(\kappa_1 + \kappa_2) \omega^2 + m_1 m_2 \omega^4  = \kappa_1^2 + \kappa_2^2 + 2\kappa_1\kappa_2 \cos ka,\\
---
-[env.equation]
---
-m_1 m_2 \omega^4 - (m_1+m_2)(\kappa_1 + \kappa_2) \omega^2 + 2\kappa_1\kappa_2 (1 - \cos ka) = 0,\\
---
-[env.equation]
---
-\omega_{1,2}^2 (k) = \frac{(m_1+m_2)(\kappa_1 + \kappa_2) \pm \sqrt{(m_1 + m_2)^2(\kappa_1 + \kappa_2)^2 - 8 m_1m_2 \kappa_1\kappa_2 (1 - \cos ka)}}{2m_1m_2},\\
---
-То есть у нас получаются две различных колебательных моды. Связь между комплексными амплитудами колебаний частиц при этом выглядит так
-[env.equation]
---
-a_2  = \frac{\kappa_1 + \kappa_2 \exp ika}{\kappa_1 + \kappa_2 - m_2 \omega^2}a_1.
---
-Рассмотрим предел $k \to 0$ -- приближение длинных волн:
-[env.equation]
---
-\omega_{1,2}^2 (k) \approx \frac{(m_1+m_2)(\kappa_1 + \kappa_2)}{2m_1m_2}\left( 1 \pm \sqrt{1 - 4 \frac{m_1m_2 \kappa_1\kappa_2}{(m_1+m_2)^2 (\kappa_1 + \kappa_2)^2} (ka)^2} \right),\\
---
-Рассмотрим сначала меньшую из частот $\omega_1$:
-[env.equation]
---
-\omega_1^2 (k) \approx \frac{\kappa_1\kappa_2}{(m_1+m_2) (\kappa_1 + \kappa_2)} (ka)^2 ,\\
---
-В этом случае выражение, связывающее амплитуды в линейном приближении имеет вид
-[env.equation]
---
-a_2  \approx \frac{\kappa_1 + \kappa_2 (1 + ika)}{\kappa_1 + \kappa_2}a_1 = a_1\left(1 + \frac{\kappa_2}{\kappa_1 + \kappa_2} ika\right).
---
-В данном случае ячейка решётки колеблется как единое целое -- амплитуды частиц равны и синфазны, а частота $\omega_1(k)$ соответствует частоте колебаний решетки с одной частицей массой $m_1 + m_2$ и жёсткостью $1/\kappa = 1/\kappa_1 + 1/\kappa_2$.
-
-Теперь рассмотрим большую частоту $\omega_2$:
-[env.equation]
---
-\omega_2^2 (k) \approx \frac{(m_1+m_2)(\kappa_1 + \kappa_2)}{m_1m_2}\left(1 - \frac{m_1m_2 \kappa_1\kappa_2}{(m_1+m_2)^2 (\kappa_1 + \kappa_2)^2} (ka)^2 \right),\\
---
-[env.equation]
---
-a_2  \approx \frac{\kappa_1 + \kappa_2 (1 + ika)}{\kappa_1 + \kappa_2 - \frac{(m_1+m_2)(\kappa_1 + \kappa_2)}{m_1}}a_1 = -a_1\frac{m_1}{m_2}\left(1 + \frac{\kappa_2}{\kappa_1 + \kappa_2} ika \right).
---
-В этом случае центр масс ячейки остаётся на месте -- частицы двигаются в противофазе с амплитудами, обратно пропорциональными массе. Частота при этом соответствует частоте колебаний частиц массами $m_1$ и $m_2$, связанных пружиной жёсткостью $\kappa_1 + \kappa_2$.
-
-Теперь посмотрим на эту задачу с точки зрения энергии системы:
-[env.equation]
---
-E = \sum_n \frac{p_{1,n}^2}{2m_1} + \frac{p_{2,n}^2}{2m_2} + \frac{\kappa_1(x_{1,n} - x_{2, n})^2}{2} + \frac{\kappa_2(x_{1,n+1} - x_{2, n})^2}{2} = \sum_{i,n} \frac{p_{i,n}^2}{2m_i} + \sum_{i,j,m,n} K_{ijmn} x_{i,m} x_{j,n},
---
-Как и в случае решётки с одной частицей в ячейке выполним преобразование Фурье:
-[env.equation]
---
-E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \sum_i\frac{1}{2m_i}\tilde{p}_i(k)\tilde{p}_i^* (k) + \sum_{ij}\tilde{K}_{ij}^* (k) \tilde{x}_i(k)\tilde{x}_j^* (k) \right].
---
-Для приведения этой квадратичной формы к диагональному виду введём переменные:
-[env.equation]
---
-\tilde{P}_i(k) = \frac{\tilde{p}_i(k)}{\sqrt{m_i}},\quad \tilde{X}_i(k) = \sqrt{m_i}\tilde{x}_i(k),
---
-которые связаны между собой отношением
-[env.equation]
---
-\tilde{P}_i(k) = \dot{\tilde{X}}_i(k).
---
-Выражение для энегрии в новых переменных приобретает вид
-[env.equation]
---
-E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \frac{1}{2}\sum_{i,j}\left[\delta_{ij} \tilde{P}_i(k)\tilde{P}_j^* (k) + \frac{2\tilde{K}_{ij}^* (k)}{\sqrt{m_i m_j}} \tilde{X}_i(k)\tilde{X}_j^* (k) \right].
---
-Введение новых переменых позволило нам сделать единичной матрицу для импульсов, поэтому для системы собственных векторов $\xi_i(k)$ матрицы $2\tilde{K}_{ij}^* (k)/\sqrt{m_i m_j}$ выражение для энергии цепочки примет вид
-[env.equation]
---
-E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \frac{1}{2}\sum_{i}\left[\pi_i(k)\pi_i^* (k) + \omega_i^2 \xi_i(k)\xi_i^* (k) \right],
---
-где $\omega_i^2$ -- собственное значение, соответствующее вектору $\xi_i(k)$.
-
-
-=== Многомерный случай с произвольным числом степеней свободы
-
-== Квантование гармонического осциллятора
+== Квантовый гармонический осциллятор
+=== Квантование осциллятора
 В квантовой механие состояние системы описывается уравнением Шрёдингера:
 [env.equation]
 --
@@ -293,9 +165,10 @@ p = -ih\frac{\partial}{\partial x},
 --
 \left(-\frac{\hbar^2}{2m} \frac{\partial^2}{\partial x^2} + \frac{m\omega^2 x^2}{2}\right)\psi = E\psi
 --
+Можно и дальше решать это уравнение, но это не наш путь. Это уравнение второго порядка, давайте попробуем что-нибудь с ним сделать.
 
 === Операторы рождения и уничтожения
-Можно и дальше решать это уравнение, но это не наш путь. Это уравнение второго порядка, давайте попробуем что-нибудь с ним сделать. Вообще гамильтониан сильно похож на разность квадратов, поэтому почему бы не представить его в виде произведения двух операторов. Пусть
+Гамильтониан сильно похож на разность квадратов, поэтому почему бы не представить его в виде произведения двух операторов. Пусть
 [env.equation]
 --
 a = \sqrt{\frac{m\omega}{2\hbar}} x + \sqrt{\frac{\hbar}{2m\omega}} \frac{\partial}{\partial x},
