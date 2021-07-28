@@ -1,10 +1,7 @@
-%.tex: %.adoc
-	asciidoctor-latex -b latex $<
+%.tex: %.adoc preamble.tex
+	asciidoctor-latex -b latex -a preamble=preamble.tex -a skip-front-matter $<
 
-%.pdf: %.tex preamble.tex
-	latexmk -pdf $<
-	latexmk -c
+%.pdf: %.tex
+	latexmk -pdf $< -outdir=$(shell dirname $@)
+	latexmk -c $<
 	$(RM) $<
-
-clean:
-	latexmk -C
