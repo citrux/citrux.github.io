@@ -1,0 +1,365 @@
+---
+katex: true
+title: Фононы на минималках
+author: citrux
+---
+= Фононы на минималках
+citrux <369565@gmail.com>
+1.08.2021
+:toc: macro
+:toc-title: Содержание
+
+[abstract]
+--
+Рассмотрим колебания решётки как ансамбль гармонических осцилляторов, заквантуем колебания, поговорим о вторичном квантовании, выясним что такое фононы, и, наконец, получим операторы смещений и импульсов атомов решётки в представлении вторичного квантования.
+--
+
+toc::[]
+
+
+== Колебания решётки
+
+=== Колебания одномерной цепочки
+Начнём с одномерной цепочки связанных осцилляторов. Пусть это будут соединённые пружинками жесткостью $\kappa$ грузики массой $m$, расположенные друг от друга на расстоянии $a$. Рассмотрим уравнение движения $n$-го грузика:
+
+[env.equation]
+--
+m\ddot{x}_n = \kappa(x_{n+1} - x_n) + \kappa(x_{n-1} - x_n)
+--
+
+[env.equation]
+--
+\ddot{x}_n = \frac{\kappa}{m}(x_{n-1} - 2x_n + x_{n+1})
+--
+
+Введём обозначение $\kappa/m = \omega_0^2$:
+
+[env.equation#eq1]
+--
+\ddot{x}_n = \omega_0^2 (x_{n-1} - 2x_n + x_{n+1})
+--
+
+Это система линейных дифференциальных уравнений второго порядка, поэтому решение имеет вид $x_n = a_n e^{-i\omega t} + a_n^* e^{i\omega t}$footnote:[Так как $x$ -- действительная величина, то константы в решении должны быть комплексно сопряжены.]. Подставим решение в уравнение <<eq1>> и получим систему уравнений:
+
+[env.equation]
+--
+-\omega^2 a_n = \omega_0^2 (a_{n-1} - 2a_n + a_{n+1})
+--
+
+Так как цепочка бесконечна, а уравнения движения не зависят от $n$, то на любом её участке должны происходить колебания с одной и той же амплитудой. Так как колебания происходят с одной и той же частотой, то сдвиг фаз между соседними осцилляторами будет сохраняться. Обозначим его $\phi$ и подставим в уравнение соотношение $a_{n+1} = a_n e^{i\phi}$:
+
+[env.equation]
+--
+-\omega^2 a_n = \omega_0^2 (a_n e^{-i\phi} - 2a_n + a_n e^{i\phi}) = 2\omega_0^2 a_n(\cos\phi - 1)
+--
+
+[env.equation]
+--
+\omega^2 = 4\omega_0^2 \sin^2 \frac{\phi}{2}
+--
+
+В силу соотношения $a_{n+1} = a_n e^{i\phi}$ имеем
+
+[env.equation]
+--
+a_n = a_0 e^{i n \phi} = a_0 e^{ikan},
+--
+
+То есть в цепочке распространяется волна
+[env.equation]
+--
+x_n = a_0 e^{i(kan - \omega t)} + a_0^* e^{-i(kan - \omega t)} = 2a_0\cos(kan-\omega t + \phi_0)
+--
+
+частота которой связвнв с волновым вектором соотношением
+[env.equation]
+--
+\omega = 2\omega_0\sin\frac{|k|a}{2}
+--
+
+=== Энергетический подход
+
+Посмотрим теперь на задачу с другой стороны. Запишем теперь энергию цепочки
+[env.equation]
+--
+E = \sum_n \frac{p_n^2}{2m} + \frac{\kappa(x_n - x_{n+1})^2}{2} = \sum_n \frac{p_n^2}{2m} + \sum_{m,n} K_{mn} x_m x_n,
+--
+где
+[env.equation]
+--
+K_{mn} = \frac{\kappa}{2}\begin{pmatrix}
+\ddots &  &  \\
+ -1 & 2 & -1 \\
+ &  & \ddots \\
+\end{pmatrix}
+--
+
+Если бы матрица $K_{mn}$ была диагональной, то осцилляторы были бы независимыми и их колебания можно было бы рассматривать по отдельности. Но $K_{mn}$ не диагональная, однако, её можно привести к диагональному виду.
+
+Заметим, что $K_{mn} = K_{m-n,0}$, так как она обладает трансляционной симметрией. Сделаем над ней преобразование Фурье:
+
+[env.equation]
+--
+\begin{gathered}
+\tilde{K}(k, k') = \sum_{m,n} K_{mn} e^{-ikam-ik'an} = [l = m-n] = \sum_l K_{l,0} e^{-ikal} \sum_n e^{-i(k' + k)an} = \\ = \tilde{K}(k) \sum_{n=-\infty}^{+\infty} e^{-i(k'+k)an} = \frac{2\pi}{a}\tilde{K}(k)\delta(k+k')
+\end{gathered}
+--
+
+Она диагонализировалась! При этом собственным вектором выступает Фурье-образ сеточной функции $x_n$:
+[env.equation]
+--
+\tilde{x}(k) = \sum x_n e^{-ikan},
+--
+при этом обратное преобразование имеет вид
+[env.equation]
+--
+x_n = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \tilde{x}(k) e^{ikan}.
+--
+Так как $p_n = m\dot{x}_n$, то $\tilde{p}(k) = m\dot{\tilde{x}}(k)$. Подставляя эти выражения для $p_n$ и $x_n$, получаем
+[env.equation]
+--
+E = \sum_n \frac{1}{2m} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} \tilde{p}(k)\tilde{p}(k') e^{i(k+k')an} + \sum_{m,n} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} K_{mn} \tilde{x}(k) e^{ikam} \tilde{x}(k') e^{ik'an},
+--
+меняя порядок суммирования и интегрирования, получаем
+[env.equation]
+--
+\begin{gathered}
+E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a^2\,dk dk'}{4\pi^2} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}(k') \frac{2\pi}{a} \delta(k+k') + \frac{2\pi}{a}\delta(k+k')\tilde{K}^* (k) \tilde{x}(k)\tilde{x}(k')\right] = \\ = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}(-k) + \tilde{K}^* (k) \tilde{x}(k)\tilde{x}(-k)\right]
+\end{gathered}
+--
+Так как $p$ и $x$ -- действительные величины, то $\tilde{x}(-k) = \tilde{x}^* (k)$ и $\tilde{p}(-k) = \tilde{p}^* (k)$, поэтому
+[env.equation]
+--
+E = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}^* (k) + \tilde{K}^* (k) \tilde{x}(k)\tilde{x}^* (k) \right].
+--
+Посмотрим внимательнее на $\tilde{K}(k)$:
+[env.equation]
+--
+\tilde{K}(k) = \sum_l K_{l,0} e^{-ikal} = \frac{\kappa}{2}(-e^{ika} + 2 - e^{-ika}) = \kappa(1 - \cos ka)
+--
+
+== Квантовый гармонический осциллятор
+=== Квантование осциллятора
+В квантовой механие состояние системы описывается уравнением Шрёдингера:
+[env.equation]
+--
+ih\frac{\partial \Psi(x, t)}{\partial t} = H\Psi(x, t)
+--
+Здесь $H$ -- гамильтониан системы. По сути своей он совпадает с выражением для энергии системы, с той лишь разницей, что вместо координат и имнульсов в него входях их операторы. Так, в случае гармонического осциллятора
+[env.equation]
+--
+H = \frac{p^2}{2m} + \frac{m\omega^2 x^2}{2}
+--
+Так как в нашем случае гамильтониан не зависит явно от времени, то можно разделить переменные $\Psi(x, t) = \psi(x) \exp\left(-i\frac{Et}{\hbar}\right)$, где $E$ -- собственное значение гамильтониана, соответствующее собственному состоянию $\psi(x)$:
+[env.equation]
+--
+H\psi = E\psi.
+--
+Оператор импульса имеен вид
+[env.equation]
+--
+p = -ih\frac{\partial}{\partial x},
+--
+поэтому задача на собственные значения принимает вид
+[env.equation]
+--
+\left(-\frac{\hbar^2}{2m} \frac{\partial^2}{\partial x^2} + \frac{m\omega^2 x^2}{2}\right)\psi = E\psi
+--
+Можно и дальше решать это уравнение, но это не наш путь. Исследуем гамильтониан с целью упростить себе задачу.
+
+=== Операторы рождения и уничтожения
+Гамильтониан сильно похож на разность квадратов, поэтому почему бы не представить его в виде произведения двух операторов. Пусть
+[env.equation]
+--
+a = \sqrt{\frac{m\omega}{2\hbar}} x + \sqrt{\frac{\hbar}{2m\omega}} \frac{\partial}{\partial x},
+a^\dagger = \sqrt{\frac{m\omega}{2\hbar}} x - \sqrt{\frac{\hbar}{2m\omega}} \frac{\partial}{\partial x},
+--
+тогда
+[env.equation]
+--
+aa^\dagger = \frac{m\omega}{2\hbar}x^2 - \frac{\hbar}{2m\omega}\frac{\partial^2}{\partial x^2} + \frac{1}{2}\left(\frac{\partial}{\partial x} x - x\frac{\partial}{\partial x}\right)
+--
+Заметим, что
+[env.equation]
+--
+\frac{\partial}{\partial x} x \psi = \psi + x \frac{\partial}{\partial x}\psi = (1 + x \frac{\partial}{\partial x})\psi,
+--
+поэтому
+[env.equation]
+--
+aa^\dagger = \frac{m\omega}{2\hbar}x^2 - \frac{\hbar}{2m\omega}\frac{\partial^2}{\partial x^2} + \frac{1}{2}
+--
+Аналогично
+[env.equation]
+--
+a^\dagger a = \frac{m\omega}{2\hbar}x^2 - \frac{\hbar}{2m\omega}\frac{\partial^2}{\partial x^2} - \frac{1}{2}
+--
+и получаем ещё одно интересное уравнение
+[env.equation]
+--
+aa^\dagger - a^\dagger a = 1.
+--
+Уравнение на собственные значения принимает вид
+[env.equation]
+--
+\hbar\omega\left(a^\dagger a + \frac{1}{2}\right)\psi = E\psi
+--
+откуда
+[env.equation]
+--
+a^\dagger a\psi = \left(\frac{E}{\hbar\omega} - \frac{1}{2}\right)\psi = \lambda\psi
+--
+Пусть $\psi_n$ -- собственная функция гамильтониана, а $E_n$ -- соответствующее собственное значение
+[env.equation]
+--
+a^\dagger a\psi_n = \lambda_n\psi_n
+--
+Таким образом, $\psi_n$ также является собственной функцией оператора $a^\dagger a$, то есть собственные функции операторов совпадают, а собственные значения связаны соотношением
+[env.equation]
+--
+\lambda_n = \frac{E_n}{\hbar\omega} - \frac{1}{2}.
+--
+Применим слева к обоим частям уравнения оператор $a$:
+[env.equation]
+--
+a a^\dagger a\psi_n = \lambda_n a\psi_n
+--
+откуда
+[env.equation]
+--
+a^\dagger a (a\psi_n) = (\lambda_n-1) (a\psi_n)
+--
+То есть $a\psi_n$ тоже собственная функция с собственным значением $\lambda_n-1$. Теперь поменяем порядок операторов и провернув всё тот же трюк, получим
+[env.equation]
+--
+a^\dagger a (a^\dagger\psi_n) = (\lambda_n+1) (a^\dagger\psi_n)
+--
+$a^\dagger\psi_n$ тоже собственная функция, но с собственным значением $\lambda_n-1$. Таким образом, узнав хотя бы одну собственную функцию мы можем построить целое семейство, применяя к ней операторы $a$ и $a^\dagger$.
+
+Воспользуемся теперь свойством эрмитово-сопряженного оператора:
+[env.equation]
+--
+\int dx \psi_n^* a^\dagger a\psi_n = \lambda_n\int dx \psi_n^* \psi_n
+--
+[env.equation]
+--
+\int dx |a\psi_n|^2 = \lambda_n
+--
+Так как функция под интегралом всюду неотрицательна, то $\lambda_n \ge 0$. Предположим теперь, что существует собственная функция $\psi_k$, соответствующее нецелому значению $\lambda_k > 0$. Тогда последовательно применяя оператор $a$ к функции $\psi_k$ можно в определённый момент получить функцию
+$\psi_m = a^{\lceil\lambda_k\rceil}\psi_k$ с собственным значением $\lambda_m = \lambda_k - \lceil\lambda_k\rceil < 0$. Но это противоречит условию неотрицательности собственых значений оператора $a^\dagger a$, поэтому $\lambda_n$ может принимать только целые неотрицательные значения. Начнём нумерацию с нуля и положим
+[env.equation]
+--
+\lambda_n = n.
+--
+Тогда, $E_0=\hbar\omega/2$ является собственным значением гамильтониана. Найдём соответстующую собственную функцию $\psi_0$ из условия
+[env.equation]
+--
+\int dx |a\psi_0|^2 = \lambda_0 = 0.
+--
+Это возможно только если
+[env.equation]
+--
+a\psi_0 = 0.
+--
+Получаем уравнение
+[env.equation]
+--
+\sqrt{\frac{m\omega}{2\hbar}} x \psi_0 + \sqrt{\frac{\hbar}{2m\omega}} \frac{\partial\psi_0}{\partial x} = 0
+--
+Преобразуем его
+[env.equation]
+--
+\frac{\partial\psi_0}{\partial x} = -\frac{m\omega}{\hbar} x \psi_0.
+--
+Разделив переменные и проинтегрировав, получаем
+[env.equation]
+--
+\psi_0 = C\exp\left(-\frac{m\omega x^2}{\hbar}\right).
+--
+Из условия нормировки
+[env.equation]
+--
+C^2\int\exp\left(-2\frac{m \omega x^2}{\hbar}\right)\, dx = 1
+--
+получим значение константы $C$:
+[env.equation]
+--
+C = \sqrt[4]{\frac{2m\omega}{\pi\hbar}}
+--
+
+== Фононы
+
+Заквантуем теперь колебания одномерной цепочки. Гамильтониан, совпадающий по форме с выражением для энергии, имеет вид
+[env.equation]
+--
+H = \sum_n \frac{p_n^2}{2m} + \sum_{m,n} K_{mn} x_m x_n.
+--
+Конкретный вид $K_{mn}$ нас даже не будет интересовать, так как из условия задачи она обладает свойством $K_{mn} = K_{m+l,n+l}$ и симметрична $K_{mn} = K_{nm}$. Выполним преобразование Фурье
+[env.equation]
+--
+H = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[ \frac{1}{2m}\tilde{p}(k)\tilde{p}^* (k) + \tilde{K}(k) \tilde{x}(k)\tilde{x}^* (k) \right].
+--
+Обозначим для удобства
+[env.equation]
+--
+\tilde{K}(k) = \frac{m\omega^2 (k)}{2}
+--
+Так как у нас тут система развалилась в набор осцилляторов, воспользуемся операторами рождения и уничтожения
+[env.equation]
+--
+a(k) = \sqrt{\frac{m\omega(k)}{2\hbar}}\tilde{x}(k) + \frac{i}{\sqrt{2m\hbar\omega(k)}}\tilde{p}(k),\quad
+a^\dagger (k) = \sqrt{\frac{m\omega(k)}{2\hbar}}\tilde{x}^* (k) - \frac{i}{\sqrt{2m\hbar\omega(k)}}\tilde{p}^* (k)
+--
+Выразим операторы координат и импульсов через операторы рождения и уничтожения:
+[env.equation]
+--
+\tilde{x}(k) = \sqrt\frac{2\hbar}{m\omega(k)} \frac{a(k) + a^\dagger (-k)}{2},\quad
+\tilde{p}(k) = -i \sqrt{2m\hbar\omega(k)} \frac{a(k) - a^\dagger (-k)}{2}
+--
+Подставляем в гамильтониан
+[env.equation]
+--
+H = \hbar\omega(k) \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} \left[
+\frac{a(k) - a^\dagger (-k)}{2}\frac{a(-k) - a^\dagger (k)}{2}
+ + \frac{a(k) + a^\dagger (-k)}{2}\frac{a(-k) + a^\dagger (k)}{2}
+\right],
+--
+и упрощаем
+[env.equation]
+--
+H = \hbar\omega(k) \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi}
+\frac{a(k)a^\dagger (k) + a^\dagger (-k)a(-k)}{2} =
+\hbar\omega(k) \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \frac{a(k)a^\dagger (k) + a^\dagger (k)a(k)}{2}.
+--
+Рассмотрим коммутатор $[a(k), a^\dagger (k')]$:
+[env.equation]
+--
+[a(k), a^\dagger (k')] = -\frac{i}{2\hbar}\sqrt\frac{\omega(k)}{\omega(k')} [\tilde{x}(k), \tilde{p}^* (k')] - \frac{i}{2\hbar}\sqrt\frac{\omega(k')}{\omega(k)} [\tilde{p}(k), \tilde{x}^* (k')] = \frac{2\pi}{a}\delta(k-k')
+--
+Опуская в гамильтониане бесконечное слагаемое, обусловленное энергией $\hbar\omega(k)/2$ нулевого состояния каждой из несчётного числа фононных мод, получаем
+[env.equation]
+--
+H = \hbar\omega(k) \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}} \frac{a\,dk}{2\pi} a^\dagger (k)a(k).
+--
+А операторы импульсов и координат в представлении вторичного квантования имеют вид
+[env.equation]
+--
+x_n = \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \sqrt\frac{2\hbar}{m\omega(k)} \frac{a(k) + a^\dagger (-k)}{2} e^{ikan} =
+\int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \sqrt\frac{\hbar}{2m\omega(k)} \left[a(k) e^{ikan} + a^\dagger (k) e^{-ikan}\right]
+--
+[env.equation]
+--
+p_n = -i \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \sqrt{2m\hbar\omega(k)} \frac{a(k) - a^\dagger (-k)}{2} e^{ikan} =
+-i \int_{-\frac{\pi}{a}}^{\frac{\pi}{a}}
+\frac{a\,dk}{2\pi} \sqrt\frac{m\hbar\omega(k)}{2} \left[a(k) e^{ikan} - a^\dagger (k) e^{-ikan}\right]
+--
+
+== Ссылки
+
+1. В. Л. Бонч-Бруевич, С. Г. Калашников "Физика полупроводников", глава 12 "Колебания кристаллической решётки".
+2. В. Г. Левич, Ю. А. Вдовин, В. А. Мямлин "Курс теоретической физики", том 2, часть 6, глава 5 "Теория твёрдого тела".
+3. Р. Фейнман "Статистическая механика", глава 6 "Операторы рождения и уничтожения".
