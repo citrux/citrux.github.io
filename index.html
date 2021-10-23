@@ -1,5 +1,12 @@
 ---
-title: Содержание
+title: Ленивое блоговедение
 ---
-$partial("templates/post-list.html")$
+<h2>Содержание</h2>
+<ul>
+    $for(posts)$
+        <li>
+            <a href="$url$">$title$</a> - $published$
+        </li>
+    $endfor$
+</ul>
 
