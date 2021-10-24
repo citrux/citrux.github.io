@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Hakyll, asciidoctor и KaTeX</title>
+        <link rel="stylesheet" href="../../css/normalize.css" />
+        <link rel="stylesheet" href="../../css/skeleton.css" />
+        <link rel="stylesheet" href="../../css/main.css" />
+        <link rel="stylesheet" href="../../css/extras.css" />
+
+        <!-- google fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Source+Serif+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+              renderMathInElement(document.body);
+          });
+        </script>
+        
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../../">Ленивое блоговедение</a>
+            </div>
+        </header>
+        <main class="container" role="main">
+            <h2>Hakyll, asciidoctor и KaTeX</h2>
+<article>
+    <section class="header">
+        Опубликовано 18.07.2021
+        <br />Последние изменения 24.10.2021
+    </section>
+    <section>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="quoteblock abstract">
+<blockquote>
+<div class="paragraph">
+<p>Сегодня разбавим решения задач с Project Euler статьёй о том, как можно приготовить блог с использованием таких популярных языков, как Haskell, Ruby и Javascript. Выясним, почему AsciiDoc круче, чем Markdown, а Hakyll на голову выше Jekyll.</p>
+</div>
+</blockquote>
+</div>
+<div id="toc" class="toc">
+<div id="toctitle" class="title">Содержание</div>
+<ul class="sectlevel1">
+<li><a href="#_asciidoc_vs_markdown">AsciiDoc vs Markdown</a></li>
+<li><a href="#_hakyll">Hakyll</a></li>
+<li><a href="#_latex">LaTeX</a></li>
+<li><a href="#_тёмная_тема">Тёмная тема</a></li>
+<li><a href="#_заключение">Заключение</a></li>
+<li><a href="#_ссылки">Ссылки</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_asciidoc_vs_markdown">AsciiDoc vs Markdown</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Обычно я пишу про что-то связанное с математикой, и для этого мне нужна поддержка формул. Markdown заставляет экранировать латеховские бэкслеши в начале команд, что неудобно. В первую очередь это связано с тем, что markdown предназначен для написания простых в плане оформления текстов со ссылками и картинками. Он просто не расчитан на такое использование.</p>
+</div>
+<div class="paragraph">
+<p>Ещё одна проблема markdown в том, что его проблематично экспортировать в человекочитаемый LaTeX. Конечно можно через pandoc, но вычищать его потом можно замучиться. А мне хочется ещё и pdf версии статей делать с его помощью.</p>
+</div>
+<div class="paragraph">
+<p>В то же самое время существует формат AsciiDoc, в базовых конструкциях слабо отличающийся по синтаксису от markdown, но при этом поддерживающий больше возможностей и расширяемый. Из потрясающих возможностей, доступных сразу:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>математические формулы</p>
+</li>
+<li>
+<p>оглавление</p>
+</li>
+<li>
+<p>директивы препроцессора, позволяющие делать условную компиляцию документа</p>
+</li>
+<li>
+<p>введение и приложения</p>
+</li>
+<li>
+<p>сноски</p>
+</li>
+<li>
+<p>пользовательские типы блоков и макросы</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Захотелось мне странного — попробовать AsciiDoc вместо markdown для написания постов в блоге. А в Jekyll это сделать оказалось не так-то просто. Да, есть плагин jekyll-asciidoc, но он не поддерживается Github Pages, поэтому сайт придётся собирать локально или использовать Github Actions. А удобство Jekyll именно в том, что не нужно делать лишних действий — запушил код на Github и сайт сам пересобрался.</p>
+</div>
+<div class="paragraph">
+<p>Если сайт в любом случае теперь придётся собирать самому, то можно попробовать любой другой генератор статических сайтов. Давно присматривался к hakyll, поэтому решил остановиться на нём.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_hakyll">Hakyll</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hakyll — это скорее библиотека для построения статического сайта, чем утилита. Вместо декларативной конфигурации сайта в YAML, как это происходит в случае Jekyll, здесь ты сам описываешь процедуру построения сайта от начала и до конца при помощи DSL на базе Haskell. Это позволяет очень гибко настраивать различные аспекты процесса и добавлять новую функциональность, дописывая недостающие функции прямо в конфигурационном файле.</p>
+</div>
+<div class="paragraph">
+<p>Стандартный вариант, генерируемый командой <code>hakyll-init</code> выглядит так:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-haskell" data-lang="haskell">--------------------------------------------------------------------------------
+{-# LANGUAGE OverloadedStrings #-}
+import           Data.Monoid (mappend)
+import           Hakyll
+
+
+--------------------------------------------------------------------------------
+main :: IO ()
+main = hakyll $ do
+    match "images/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
+    match "css/*" $ do
+        route   idRoute
+        compile compressCssCompiler
+
+    match (fromList ["about.rst", "contact.markdown"]) $ do
+        route   $ setExtension "html"
+        compile $ pandocCompiler
+            &gt;&gt;= loadAndApplyTemplate "templates/default.html" defaultContext
+            &gt;&gt;= relativizeUrls
+
+    match "posts/*" $ do
+        route $ setExtension "html"
+        compile $ pandocCompiler
+            &gt;&gt;= loadAndApplyTemplate "templates/post.html"    postCtx
+            &gt;&gt;= loadAndApplyTemplate "templates/default.html" postCtx
+            &gt;&gt;= relativizeUrls
+
+    create ["archive.html"] $ do
+        route idRoute
+        compile $ do
+            posts &lt;- recentFirst =&lt;&lt; loadAll "posts/*"
+            let archiveCtx =
+                    listField "posts" postCtx (return posts) `mappend`
+                    constField "title" "Archives"            `mappend`
+                    defaultContext
+
+            makeItem ""
+                &gt;&gt;= loadAndApplyTemplate "templates/archive.html" archiveCtx
+                &gt;&gt;= loadAndApplyTemplate "templates/default.html" archiveCtx
+                &gt;&gt;= relativizeUrls
+
+
+    match "index.html" $ do
+        route idRoute
+        compile $ do
+            posts &lt;- recentFirst =&lt;&lt; loadAll "posts/*"
+            let indexCtx =
+                    listField "posts" postCtx (return posts) `mappend`
+                    defaultContext
+
+            getResourceBody
+                &gt;&gt;= applyAsTemplate indexCtx
+                &gt;&gt;= loadAndApplyTemplate "templates/default.html" indexCtx
+                &gt;&gt;= relativizeUrls
+
+    match "templates/*" $ compile templateBodyCompiler
+
+
+--------------------------------------------------------------------------------
+postCtx :: Context String
+postCtx =
+    dateField "date" "%B %e, %Y" `mappend`
+    defaultContext</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>За генерацию html-страниц с постами отвечают вот эти строчки</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-haskell" data-lang="haskell">match "posts/*" $ do
+    route $ setExtension "html"
+    compile $ pandocCompiler
+        &gt;&gt;= loadAndApplyTemplate "templates/post.html"    postCtx
+        &gt;&gt;= loadAndApplyTemplate "templates/default.html" postCtx
+        &gt;&gt;= relativizeUrls</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Как видно, hakyll использует pandoc для преобразования форматов. Но сгенерировать html из asciidoc он не в состоянии, поэтому пришлось написать свою функцию для компиляции. В составе hakyll присутствует функция unixFilter, которая позволяет запустить процесс и передать ему на стандартный поток ввода содержимое файла</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-haskell" data-lang="haskell">htmlCompiler :: Compiler (Item String)
+htmlCompiler = do
+    getResourceString &gt;&gt;= withItemBody (unixFilter "asciidoctor-latex"
+                                                  ["-b"
+                                                  , "html5"
+                                                  , "-s"
+                                                  , "-a"
+                                                  , "embedded"
+                                                  , "-a"
+                                                  , "skip-front-matter"
+                                                  , "-"])
+
+...
+
+    match "posts/*" $ do
+        route $ setExtension "html"
+        compile $ htmlCompiler
+            &gt;&gt;= loadAndApplyTemplate "templates/post.html"    postCtx
+            &gt;&gt;= loadAndApplyTemplate "templates/default.html" postCtx
+            &gt;&gt;= relativizeUrls</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Здесь во втором аргументе unixFilter передаётся список параметров командной строки для <code>asciidoctor-latex</code>, а именно:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>-b html5</code> указывает, что нужно конвертировать asciidoc в html5</p>
+</li>
+<li>
+<p><code>-s</code> не добавляет собственных asciidoctorовских хедера и футера, только конвертирует содержимое</p>
+</li>
+<li>
+<p><code>-a embedded</code> не печатает заголовок, это отдано на откуп шаблонам hakyll</p>
+</li>
+<li>
+<p><code>-a skip-front-matter</code> игнорирует front-matter с метаданными для hakyll в начале файла</p>
+</li>
+<li>
+<p><code>-</code> заставляет читать со стандартного потока ввода</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Далее мне захотелось, чтобы материалы, относящиеся к посту (картинки, код) лежали в каталоге этого поста. В результате получилось следующее</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-haskell" data-lang="haskell">htmlCompiler :: Compiler (Item String)
+htmlCompiler = do
+    path &lt;- getResourceFilePath
+    let (dir,_) = splitFileName path
+    getResourceString &gt;&gt;= withItemBody (unixFilter "asciidoctor-latex"
+                                                  ["-b"
+                                                  , "html5"
+                                                  , "-B"
+                                                  , dir
+                                                  , "-s"
+                                                  , "-a"
+                                                  , "embedded"
+                                                  , "-a"
+                                                  , "skip-front-matter"
+                                                  , "-"])
+
+...
+
+    match "posts/*/index.adoc" $ do
+        route $ setExtension "html"
+        compile $ htmlCompiler
+            &gt;&gt;= loadAndApplyTemplate "templates/post.html"    postCtx
+            &gt;&gt;= loadAndApplyTemplate "templates/default.html" postCtx
+            &gt;&gt;= relativizeUrls
+
+    match "posts/**/*" $ do
+        route   idRoute
+        compile copyFileCompiler</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ну и чтобы избавиться от <code>index.html</code> в конце ссылок</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-haskell" data-lang="haskell">removeIndexHtml :: Item String -&gt; Compiler (Item String)
+removeIndexHtml item = return $ fmap (withUrls removeIndexStr) item
+    where
+        removeIndexStr :: String -&gt; String
+        removeIndexStr url = case splitFileName url of
+                                (dir, "index.html") | isLocal dir -&gt; dir
+                                _                                 -&gt; url
+        isLocal :: String -&gt; Bool
+        isLocal uri        = not (isInfixOf "://" uri)
+
+...
+
+    match "posts/*/index.adoc" $ do
+        route $ setExtension "html"
+        compile $ htmlCompiler
+            &gt;&gt;= loadAndApplyTemplate "templates/post.html"    postCtx
+            &gt;&gt;= loadAndApplyTemplate "templates/default.html" postCtx
+            &gt;&gt;= relativizeUrls
+            &gt;&gt;= removeIndexHtml</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_latex">LaTeX</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Сам asciidoctor не позволяет генерировать latex, но это можно сделать с помощью расширения asciidoctor-latex. Для лучшей поддержки широких возможностей latex, он привносит конструкцию env для окружений:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">[env.environment]
+--
+Тут что-то по-латеховски
+--</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>что при компиляции в latex превратится в</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-tex" data-lang="tex">\begin{environment}
+Тут что-то по-латеховски
+\end{environment}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Так, для формул он предоставляет блок <code>env.equation</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">[env.equation]
+--
+\lim_{x \to 0} \frac{\sin x}{x} = 1
+--</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Для рендеринга формул в html я использую KaTeX, пока на стороне браузера с использованием js, но в планах довести до ума <code>asciidoctor-latex</code>, чтобы делать это во время построения сайта.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_тёмная_тема">Тёмная тема</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Для поддержки тёмной темы в вебе пришлось использовать svg для графиков. Для этого их приходится вставлять напрямую в html. В тоже время, этот подход не подойдёт для других форматов, например, для pdf. Там графику нужно вставить картинкой. Asciidoc позволяет решить эту проблему конструкциями <code>ifdef</code> и <code>ifndef</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">ifdef::backend-html5[]
+++++
+include::time_improved.svg[]
+++++
+endif::[]
+
+ifndef::backend-html5[]
+image::time_improved.png[]
+endif::[]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>В данном случае, при компиляции в html вставится содержимое файла <code>time_improved.svg</code>, а при любом другом формате вывода будет добавлено изображение <code>time_improved.png</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_заключение">Заключение</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Основным недостатком данного способа является использование заброшенного сообществом asciidoctor-latex.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ссылки">Ссылки</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="https://asciidoctor.org/">AsciiDoctor — актуальный конвертер из формата AsciiDoc</a></p>
+</li>
+<li>
+<p><a href="https://github.com/citrux/asciidoctor-latex">AsciiDoctor-LaTeX (мой форк)</a></p>
+</li>
+<li>
+<p><a href="https://jaspervdj.be/hakyll/">Hakyll: a Haskell library for generating static sites</a></p>
+</li>
+<li>
+<p><a href="https://katex.org">KaTeX: The fastest math typesetting library for the web</a></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+    </section>
+</article>
+
+        </main>
+    </body>
+</html>
