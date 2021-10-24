@@ -5,7 +5,7 @@ build: site
 	./site build
 
 site: site.hs
-	ghc --make -dynamic site
+	/usr/bin/ghc --make -dynamic site
 
 clean:
 	rm ./site
