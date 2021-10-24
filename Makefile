@@ -5,8 +5,8 @@ build: site
 	./site build
 
 site: site.hs
-	ls -l $(which ghc)
-	ls -l $(which ghc-8.6.5)
+	whereis ghc
+	whereis ghc-8.6.5
 	ghc-8.6.5 --make -v -dynamic site
 
 clean:
