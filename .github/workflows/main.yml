@@ -21,7 +21,7 @@ jobs:
         fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
     - name: Install building dependencies
       run: |
-        cabal new-install hakyll
+        cabal install --only-dependencies
         git clone https://github.com/citrux/asciidoctor-latex
         cd asciidoctor-latex
         gem build asciidoctor-latex.gemspec
