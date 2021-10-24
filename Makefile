@@ -5,9 +5,7 @@ build: site
 	./site build
 
 site: site.hs
-	whereis ghc
-	whereis ghc-8.6.5
-	ghc-8.6.5 --make -v -dynamic site
+	ghc --make -dynamic site
 
 clean:
 	rm ./site
