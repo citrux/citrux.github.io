@@ -5,7 +5,8 @@ build: site
 	./site build
 
 site: site.hs
-	ghc-8.6.5 --version
+	ls -l $(which ghc)
+	ls -l $(which ghc-8.6.5)
 	ghc-8.6.5 --make -v -dynamic site
 
 clean:
