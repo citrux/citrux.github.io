@@ -5,8 +5,8 @@ build: site
 	./site build
 
 site: site.hs
-	ghc --version
-	ghc --make -v -dynamic site
+	ghc-8.6.5 --version
+	ghc-8.6.5 --make -v -dynamic site
 
 clean:
 	rm ./site
